@@ -41,6 +41,9 @@ android.archs = arm64-v8a, armeabi-v7a
 # (bool) indicates if the application should be fullscreen or not
 fullscreen = 0
 
+# (bool) Automatically accept Android SDK licenses
+android.accept_sdk_license = True
+
 # (list) The Android libs to copy in the project
 # android.add_libs_armeabi_v7a = libs/android-v7a/*.so
 

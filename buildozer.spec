@@ -18,9 +18,7 @@ source.include_exts = py,png,jpg,kv,db
 # (str) Application versioning (method 1)
 version = 2.0.0
 
-# (list) Application requirements
-# CAUTION: KivyMD 2.0 requires materialyoucolor for M3 themes
-requirements = python3, kivy==2.3.1, https://github.com/kivymd/KivyMD/archive/master.zip, pillow, sqlite3, materialyoucolor
+requirements = python3, kivy==2.3.1, https://github.com/kivymd/KivyMD/archive/master.zip, pillow, materialyoucolor
 
 # (str) Custom source folders for requirements
 # packagers often need orientation restricted for student apps
@@ -47,9 +45,8 @@ android.accept_sdk_license = True
 # (list) The Android libs to copy in the project
 # android.add_libs_armeabi_v7a = libs/android-v7a/*.so
 
-# (str) ICON and Splash Screen (Recommended to add these files to project root)
-# icon.filename = %(source.dir)s/icon.png
-# presplash.filename = %(source.dir)s/splash.png
+icon.filename = %(source.dir)s/icon.png
+presplash.filename = %(source.dir)s/presplash.png
 
 [buildozer]
 

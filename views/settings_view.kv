@@ -1,0 +1,62 @@
+<SettingsView>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        md_bg_color: self.theme_cls.backgroundColor
+
+        MDTopAppBar:
+            type: "small"
+            md_bg_color: self.theme_cls.primaryColor
+            
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "arrow-left"
+                    theme_icon_color: "Custom"
+                    icon_color: 1, 1, 1, 1
+                    on_release: root.go_back()
+            
+            MDTopAppBarTitle:
+                text: "App Settings"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: dp(24)
+                spacing: dp(24)
+                size_hint_y: None
+                height: self.minimum_height
+
+                MDLabel:
+                    text: "Personalization"
+                    font_style: "Title"
+                    role: "large"
+                    theme_text_color: "Primary"
+
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: dp(64)
+                    
+                    MDLabel:
+                        text: "Dark Mode"
+                        theme_text_color: "Primary"
+                    
+                    MDSwitch:
+                        active: True if self.theme_cls.theme_style == "Dark" else False
+                        on_active: root.toggle_theme()
+                        pos_hint: {"center_y": .5}
+
+                MDDivider:
+
+                MDLabel:
+                    text: "Project Info"
+                    font_style: "Title"
+                    role: "large"
+                    theme_text_color: "Primary"
+
+                MDLabel:
+                    text: "Version: 2.0.0 (Material 3)\nDeveloper: SupsaveTech Solutions Ltd\nPlatform: KivyMD cross-platform"
+                    theme_text_color: "Secondary"
+                    font_style: "Label"
+                    role: "large"

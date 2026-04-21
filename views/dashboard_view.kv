@@ -1,0 +1,114 @@
+<TaskCard>:
+    size_hint_y: None
+    height: dp(90)
+    padding: dp(8)
+    spacing: dp(8)
+    radius: dp(12)
+    style: "elevated"
+    md_bg_color: self.theme_cls.surfaceColor
+    
+    MDBoxLayout:
+        orientation: "horizontal"
+        spacing: dp(12)
+        
+        # Priority Indicator Bar
+        MDBoxLayout:
+            id: priority_bar
+            size_hint_x: None
+            width: dp(6)
+            radius: dp(4)
+            md_bg_color: self.theme_cls.secondaryColor
+            
+        MDBoxLayout:
+            orientation: "vertical"
+            spacing: dp(2)
+            
+            MDLabel:
+                text: root.title
+                theme_text_color: "Primary"
+                font_style: "Title"
+                role: "medium"
+                strikethrough: root.is_completed
+                
+            MDLabel:
+                text: f"{root.module} • {root.due_date}"
+                theme_text_color: "Secondary"
+                font_style: "Label"
+                role: "medium"
+
+        # Interactive Controls
+        MDBoxLayout:
+            size_hint_x: None
+            width: self.minimum_width
+            spacing: dp(4)
+            pos_hint: {"center_y": .5}
+            
+            MDIconButton:
+                id: check_btn
+                icon: "check-circle" if root.is_completed else "circle-outline"
+                theme_icon_color: "Custom"
+                icon_color: (0.2, 0.6, 0.2, 1) if root.is_completed else self.theme_cls.primaryColor
+                
+            MDIconButton:
+                id: delete_btn
+                icon: "delete-outline"
+                theme_icon_color: "Error"
+
+<DashboardView>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        md_bg_color: self.theme_cls.backgroundColor
+
+        MDTopAppBar:
+            type: "small"
+            md_bg_color: self.theme_cls.primaryColor
+            
+            MDTopAppBarTitle:
+                text: "Student Planner"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+
+            MDTopAppBarTrailingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "cog"
+                    theme_icon_color: "Custom"
+                    icon_color: 1, 1, 1, 1
+                    on_release: root.manager.current = 'settings'
+                
+                MDActionTopAppBarButton:
+                    icon: "logout"
+                    theme_icon_color: "Custom"
+                    icon_color: 1, 1, 1, 1
+                    on_release: root.handle_logout()
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            padding: dp(16)
+            spacing: dp(16)
+
+            MDTextField:
+                id: search_field
+                mode: "outlined"
+                on_text: root.refresh_tasks(self.text)
+                
+                MDTextFieldHintText:
+                    text: "Search by module or title..."
+                
+                MDTextFieldLeadingIcon:
+                    icon: "magnify"
+
+            ScrollView:
+                bar_width: 0
+                MDBoxLayout:
+                    id: task_list
+                    orientation: 'vertical'
+                    spacing: dp(12)
+                    size_hint_y: None
+                    height: self.minimum_height
+                    padding: [0, 0, 0, dp(80)] # Bottom padding for FAB
+
+        MDFabButton:
+            icon: "plus"
+            style: "standard"
+            pos_hint: {"center_x": .88, "center_y": .08}
+            on_release: root.go_to_add_task()

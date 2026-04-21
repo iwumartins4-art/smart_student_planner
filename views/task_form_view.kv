@@ -1,0 +1,97 @@
+<TaskFormView>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        md_bg_color: self.theme_cls.backgroundColor
+
+        MDTopAppBar:
+            type: "small"
+            md_bg_color: self.theme_cls.primaryColor
+            
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "arrow-left"
+                    theme_icon_color: "Custom"
+                    icon_color: 1, 1, 1, 1
+                    on_release: root.go_back()
+            
+            MDTopAppBarTitle:
+                id: form_title
+                text: "Add Task"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: dp(24)
+                spacing: dp(24)
+                size_hint_y: None
+                height: self.minimum_height
+
+                MDTextField:
+                    id: title
+                    mode: "outlined"
+                    MDTextFieldHintText:
+                        text: "Task Title *"
+                    MDTextFieldHelperText:
+                        text: "What needs to be done?"
+                        mode: "on_focus"
+
+                MDTextField:
+                    id: module
+                    mode: "outlined"
+                    MDTextFieldHintText:
+                        text: "Module / Subject"
+                    MDTextFieldHelperText:
+                        text: "e.g., Computer Science"
+                        mode: "on_focus"
+
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    spacing: dp(12)
+                    size_hint_y: None
+                    height: dp(64)
+                    
+                    MDTextField:
+                        id: due_date
+                        mode: "outlined"
+                        MDTextFieldHintText:
+                            text: "Due Date *"
+                        MDTextFieldHelperText:
+                            text: "YYYY-MM-DD"
+                            mode: "persistent"
+
+                    MDIconButton:
+                        icon: "calendar"
+                        style: "standard"
+                        pos_hint: {"center_y": .4}
+                        on_release: root.show_date_picker()
+
+                MDTextField:
+                    id: priority
+                    mode: "outlined"
+                    MDTextFieldHintText:
+                        text: "Priority"
+                    MDTextFieldHelperText:
+                        text: "High, Medium, or Low"
+                        mode: "on_focus"
+
+                MDTextField:
+                    id: notes
+                    mode: "outlined"
+                    multiline: True
+                    MDTextFieldHintText:
+                        text: "Additional Notes"
+
+                MDButton:
+                    style: "filled"
+                    size_hint_x: 1
+                    on_release: root.handle_save()
+                    MDButtonText:
+                        text: "SAVE TASK"
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                
+                # Bottom spacing for better reachability
+                MDWidget:
+                    size_hint_y: None
+                    height: dp(100)

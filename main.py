@@ -5,11 +5,20 @@ from kivy.uix.screenmanager import ScreenManager
 import sys
 import os
 
-# Set window size for mobile simulation
-Window.size = (360, 640)
+from kivy.utils import platform
 
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(PROJECT_ROOT)
+# Set window size only for desktop simulation
+if platform in ['win', 'linux', 'macosx']:
+    Window.size = (360, 640)
+
+# Robust path detection for mobile
+if platform == 'android':
+    PROJECT_ROOT = os.environ.get('PYTHONPATH', '.').split(':')[0]
+else:
+    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+if PROJECT_ROOT not in sys.path:
+    sys.path.append(PROJECT_ROOT)
 
 from views.login_view import LoginView
 from views.dashboard_view import DashboardView

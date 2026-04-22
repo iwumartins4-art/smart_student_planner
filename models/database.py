@@ -15,8 +15,17 @@ class Database:
         if self.initialized: return
         
         try:
-            # We use the current project directory for the database
-            base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            from kivy.utils import platform
+            
+            # Determine a writable directory based on the platform
+            if platform == 'android':
+                # On Android, use the app's private files directory
+                from android.storage import app_storage_path
+                base_path = app_storage_path()
+            else:
+                # On Desktop, use the project root
+                base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            
             db_dir = os.path.join(base_path, "database")
             
             if not os.path.exists(db_dir):
@@ -34,6 +43,12 @@ class Database:
             
         except Exception as e:
             print(f"[DB ERROR] Database initialization failed: {e}")
+            # Fallback to in-memory database to prevent crash, though data won't persist
+            self.db_path = ":memory:"
+            self.conn = sqlite3.connect(self.db_path, check_same_thread=False)
+            self.cursor = self.conn.cursor()
+            self.create_tables()
+            self.initialized = True
 
     def create_tables(self):
         self.cursor.execute('''

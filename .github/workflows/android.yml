@@ -44,6 +44,9 @@ jobs:
         run: |
           # Ensure buildozer is in PATH
           export PATH=$PATH:~/.local/bin
+          # Unset conflicting system SDK paths to force Buildozer to use its own local writable SDK
+          unset ANDROID_HOME
+          unset ANDROID_SDK_ROOT
           # Run buildozer in debug mode
           buildozer -v android debug
         env:

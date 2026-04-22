@@ -30,7 +30,17 @@ jobs:
           sudo apt update
           sudo apt install -y git zip unzip python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev libsqlite3-dev
           pip install --upgrade pip
-          pip install buildozer "cython>=3.0.0,<3.1.0" colorama
+          # Install latest Buildozer and correct Cython version
+          pip install git+https://github.com/kivy/buildozer.git@master colorama
+          pip install --upgrade "cython>=3.0.0,<3.1.0"
+
+      - name: Manual SDK Setup
+        run: |
+          # Create a writable SDK root in the home directory
+          mkdir -p $HOME/android-sdk
+          # Use system tool to install missing API 33 components into our writable folder
+          # This bypasses Buildozer's own downloader bugs
+          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platforms;android-33" "build-tools;33.0.0" "platform-tools" > /dev/null
 
       - name: Cache Buildozer
         uses: actions/cache@v4
@@ -43,7 +53,9 @@ jobs:
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:~/.local/bin
-          # Run buildozer in debug mode
+          # Force Buildozer to use our manually prepared writable SDK
+          export ANDROID_HOME=$HOME/android-sdk
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
           buildozer -v android debug
         env:
           USER: runner

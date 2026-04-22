@@ -23,19 +23,14 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '11'
 
       - name: Install System Dependencies
         run: |
           sudo apt update
           sudo apt install -y git zip unzip python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev libsqlite3-dev
           pip install --upgrade pip
-          # Install Buildozer first, then force the correct Cython version for Kivy 2.3.1
-          pip install git+https://github.com/kivy/buildozer.git@master colorama
-          pip install --upgrade "cython>=3.0.0,<3.1.0"
-          # Silent license acceptance to prevent log stalls
-          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/tools/bin
-          yes | sdkmanager --sdk_root=$ANDROID_HOME --licenses > /dev/null 2>&1 || true
+          pip install buildozer "cython>=3.0.0,<3.1.0" colorama
 
       - name: Cache Buildozer
         uses: actions/cache@v4
@@ -47,11 +42,7 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Ensure buildozer is in PATH
           export PATH=$PATH:~/.local/bin
-          # Unset conflicting system SDK paths to force Buildozer to use its own local writable SDK
-          unset ANDROID_HOME
-          unset ANDROID_SDK_ROOT
           # Run buildozer in debug mode
           buildozer -v android debug
         env:

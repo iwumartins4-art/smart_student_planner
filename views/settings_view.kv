@@ -11,19 +11,19 @@
                 MDActionTopAppBarButton:
                     icon: "arrow-left"
                     theme_icon_color: "Custom"
-                    icon_color: 1, 1, 1, 1
+                    icon_color: self.theme_cls.onPrimaryColor
                     on_release: root.go_back()
             
             MDTopAppBarTitle:
                 text: "App Settings"
                 theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
+                text_color: self.theme_cls.onPrimaryColor
 
         ScrollView:
             MDBoxLayout:
                 orientation: 'vertical'
                 padding: dp(24)
-                spacing: dp(24)
+                spacing: dp(16)
                 size_hint_y: None
                 height: self.minimum_height
 
@@ -55,8 +55,33 @@
                     role: "large"
                     theme_text_color: "Primary"
 
-                MDLabel:
-                    text: "Version: 2.0.0 (Material 3)\nDeveloper: SupsaveTech Solutions Ltd\nPlatform: KivyMD cross-platform"
-                    theme_text_color: "Secondary"
-                    font_style: "Label"
-                    role: "large"
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    spacing: dp(8)
+                    size_hint_y: None
+                    height: self.minimum_height
+
+                    MDLabel:
+                        text: "Version: 3.0.0 (Material 3)"
+                        theme_text_color: "Secondary"
+                        font_style: "Label"
+                        role: "large"
+
+                    MDLabel:
+                        text: "STUDENT NAME: MARTINS CHINATU IWU"
+                        theme_text_color: "Primary"
+                        font_style: "Label"
+                        role: "large"
+                        bold: True
+
+                    MDLabel:
+                        text: "STUDENT NUMBER: 250310429"
+                        theme_text_color: "Secondary"
+                        font_style: "Label"
+                        role: "medium"
+
+                    MDLabel:
+                        text: "Platform: KivyMD Cross-Platform Engine"
+                        theme_text_color: "Secondary"
+                        font_style: "Label"
+                        role: "small"

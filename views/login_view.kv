@@ -38,13 +38,26 @@
                 MDTextFieldLeadingIcon:
                     icon: "key"
 
-            MDButton:
-                style: "filled"
+            MDBoxLayout:
+                orientation: "horizontal"
+                spacing: dp(12)
                 size_hint_x: 1
-                on_release: root.handle_login(username.text, password.text)
-                MDButtonText:
-                    text: "LOGIN"
-                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                MDButton:
+                    style: "filled"
+                    size_hint_x: .5
+                    on_release: root.handle_login(username.text, password.text)
+                    MDButtonText:
+                        text: "LOGIN"
+                        pos_hint: {"center_x": .5, "center_y": .5}
+
+                MDButton:
+                    style: "outlined"
+                    size_hint_x: .5
+                    on_release: root.manager.current = 'register'
+                    MDButtonText:
+                        text: "REGISTER"
+                        pos_hint: {"center_x": .5, "center_y": .5}
 
         MDLabel:
             text: "Empowering your academic journey"

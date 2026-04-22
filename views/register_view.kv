@@ -1,0 +1,71 @@
+<RegisterView>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: dp(24)
+        spacing: dp(24)
+        md_bg_color: self.theme_cls.backgroundColor
+        
+        MDLabel:
+            text: "Create Account"
+            halign: "center"
+            theme_text_color: "Primary"
+            font_style: "Headline"
+            role: "medium"
+            size_hint_y: None
+            height: dp(120)
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            spacing: dp(20)
+            size_hint_y: None
+            height: self.minimum_height
+            pos_hint: {'center_y': .5}
+
+            MDTextField:
+                id: reg_username
+                mode: "outlined"
+                MDTextFieldHintText:
+                    text: "New Username"
+                MDTextFieldLeadingIcon:
+                    icon: "account-plus"
+
+            MDTextField:
+                id: reg_password
+                mode: "outlined"
+                password: True
+                MDTextFieldHintText:
+                    text: "New Password"
+                MDTextFieldLeadingIcon:
+                    icon: "key-plus"
+
+            MDTextField:
+                id: reg_confirm_password
+                mode: "outlined"
+                password: True
+                MDTextFieldHintText:
+                    text: "Confirm Password"
+                MDTextFieldLeadingIcon:
+                    icon: "key-check"
+
+            MDButton:
+                style: "filled"
+                size_hint_x: 1
+                on_release: root.handle_register(reg_username.text, reg_password.text, reg_confirm_password.text)
+                MDButtonText:
+                    text: "REGISTER"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+            MDButton:
+                style: "text"
+                size_hint_x: 1
+                on_release: root.go_to_login()
+                MDButtonText:
+                    text: "ALREADY HAVE AN ACCOUNT? LOGIN"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+        MDLabel:
+            text: "Join the Smart Student Community"
+            halign: "center"
+            theme_text_color: "Secondary"
+            font_style: "Label"
+            role: "medium"

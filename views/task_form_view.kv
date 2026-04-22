@@ -11,14 +11,14 @@
                 MDActionTopAppBarButton:
                     icon: "arrow-left"
                     theme_icon_color: "Custom"
-                    icon_color: 1, 1, 1, 1
+                    icon_color: self.theme_cls.onPrimaryColor
                     on_release: root.go_back()
             
             MDTopAppBarTitle:
                 id: form_title
                 text: "Add Task"
                 theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
+                text_color: self.theme_cls.onPrimaryColor
 
         ScrollView:
             MDBoxLayout:
@@ -70,11 +70,15 @@
                 MDTextField:
                     id: priority
                     mode: "outlined"
+                    readonly: True
+                    on_focus: if self.focus: root.open_priority_menu()
                     MDTextFieldHintText:
                         text: "Priority"
                     MDTextFieldHelperText:
-                        text: "High, Medium, or Low"
-                        mode: "on_focus"
+                        text: "Tap to select Priority"
+                        mode: "persistent"
+                    MDTextFieldTrailingIcon:
+                        icon: "menu-down"
 
                 MDTextField:
                     id: notes

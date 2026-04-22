@@ -28,6 +28,26 @@ class TaskFormView(MDScreen):
         self.ids.notes.text = ""
         self.ids.form_title.text = "Add Task"
 
+    def open_priority_menu(self):
+        from kivymd.uix.menu import MDDropdownMenu
+        
+        menu_items = [
+            {
+                "text": f"{i}",
+                "on_release": lambda x=f"{i}": self.set_item(x),
+            } for i in ["High", "Medium", "Low"]
+        ]
+        self.menu = MDDropdownMenu(
+            caller=self.ids.priority,
+            items=menu_items,
+            width_mult=4,
+        )
+        self.menu.open()
+
+    def set_item(self, text_item):
+        self.ids.priority.text = text_item
+        self.menu.dismiss()
+
     def show_date_picker(self):
         try:
             from kivymd.uix.pickers.datepicker.datepicker import MDModalDatePicker

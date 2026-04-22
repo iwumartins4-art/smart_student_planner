@@ -66,19 +66,19 @@
             MDTopAppBarTitle:
                 text: "Student Planner"
                 theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
+                text_color: self.theme_cls.onPrimaryColor
 
             MDTopAppBarTrailingButtonContainer:
                 MDActionTopAppBarButton:
                     icon: "cog"
                     theme_icon_color: "Custom"
-                    icon_color: 1, 1, 1, 1
+                    icon_color: self.theme_cls.onPrimaryColor
                     on_release: root.manager.current = 'settings'
                 
                 MDActionTopAppBarButton:
                     icon: "logout"
                     theme_icon_color: "Custom"
-                    icon_color: 1, 1, 1, 1
+                    icon_color: self.theme_cls.onPrimaryColor
                     on_release: root.handle_logout()
 
         MDBoxLayout:

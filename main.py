@@ -26,18 +26,21 @@ class SmartStudentPlanner(MDApp):
         # Absolute path loading to prevent file-not-found errors
         from kivy.lang import Builder
         Builder.load_file(os.path.join(PROJECT_ROOT, 'views', 'login_view.kv'))
+        Builder.load_file(os.path.join(PROJECT_ROOT, 'views', 'register_view.kv'))
         Builder.load_file(os.path.join(PROJECT_ROOT, 'views', 'dashboard_view.kv'))
         Builder.load_file(os.path.join(PROJECT_ROOT, 'views', 'task_form_view.kv'))
         Builder.load_file(os.path.join(PROJECT_ROOT, 'views', 'settings_view.kv'))
  
         from kivy.uix.screenmanager import ScreenManager
         from views.login_view import LoginView
+        from views.register_view import RegisterView
         from views.dashboard_view import DashboardView
         from views.task_form_view import TaskFormView
         from views.settings_view import SettingsView
 
         sm = ScreenManager()
         sm.add_widget(LoginView(name='login'))
+        sm.add_widget(RegisterView(name='register'))
         sm.add_widget(DashboardView(name='dashboard'))
         sm.add_widget(TaskFormView(name='task_form'))
         sm.add_widget(SettingsView(name='settings'))
@@ -52,6 +55,7 @@ if __name__ == "__main__":
 
         # Lazy Imports to catch early-stage crashes during import
         from views.login_view import LoginView
+        from views.register_view import RegisterView
         from views.dashboard_view import DashboardView
         from views.task_form_view import TaskFormView
         from views.settings_view import SettingsView

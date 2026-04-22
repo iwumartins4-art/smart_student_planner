@@ -33,9 +33,9 @@ jobs:
           # Install Buildozer first, then force the correct Cython version for Kivy 2.3.1
           pip install git+https://github.com/kivy/buildozer.git@master colorama
           pip install --upgrade "cython>=3.0.0,<3.1.0"
-          # Pre-accept SDK licenses and ensure sdkmanager is usable
+          # Silent license acceptance to prevent log stalls
           export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/tools/bin
-          yes | sdkmanager --licenses || true
+          yes | sdkmanager --sdk_root=$ANDROID_HOME --licenses > /dev/null 2>&1 || true
 
       - name: Cache Buildozer
         uses: actions/cache@v4

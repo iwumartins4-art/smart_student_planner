@@ -51,6 +51,9 @@ presplash.filename = %(source.dir)s/presplash.png
 # (str) python-for-android branch to use
 p4a.branch = master
 
+# (str) Path to Android SDK
+android.sdk_path = /home/runner/android-sdk
+
 [buildozer]
 
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))

@@ -5,19 +5,19 @@
 
         MDTopAppBar:
             type: "small"
-            md_bg_color: self.theme_cls.primaryColor
+            md_bg_color: 0.4, 0.2, 0.6, 1 # Force High Contrast Purple
             
             MDTopAppBarLeadingButtonContainer:
                 MDActionTopAppBarButton:
                     icon: "arrow-left"
                     theme_icon_color: "Custom"
-                    icon_color: self.theme_cls.onPrimaryColor
+                    icon_color: 1, 1, 1, 1
                     on_release: root.go_back()
             
             MDTopAppBarTitle:
                 text: "App Settings"
                 theme_text_color: "Custom"
-                text_color: self.theme_cls.onPrimaryColor
+                text_color: 1, 1, 1, 1
 
         ScrollView:
             MDBoxLayout:

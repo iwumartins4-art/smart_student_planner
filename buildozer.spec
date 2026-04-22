@@ -16,7 +16,7 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,db
 
 # (str) Application versioning (method 1)
-version = 3.0.0
+version = 3.0.2
 
 requirements = python3, kivy==2.3.1, https://github.com/kivymd/KivyMD/archive/master.zip, pillow, materialyoucolor, requests, android, filetype, asynckivy, asyncgui, exceptiongroup, certifi, chardet, idna, urllib3, typing-extensions
 

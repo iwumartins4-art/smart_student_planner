@@ -44,7 +44,8 @@ class TaskFormView(MDScreen):
         self.menu = MDDropdownMenu(
             caller=self.ids.priority,
             items=menu_items,
-            width_mult=4,
+            width_mult=3,
+            position="bottom",
         )
         self.menu.open()
 

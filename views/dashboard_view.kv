@@ -61,24 +61,25 @@
 
         MDTopAppBar:
             type: "small"
-            md_bg_color: 0.4, 0.2, 0.6, 1 # Force High Contrast Purple
+            md_bg_color: self.theme_cls.surfaceColor # Use surface color for modern look
             
             MDTopAppBarTitle:
                 text: "Student Planner"
                 theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
+                # FORCE BLACK IN LIGHT MODE, WHITE IN DARK MODE
+                text_color: (0, 0, 0, 1) if self.theme_cls.theme_style == "Light" else (1, 1, 1, 1)
 
             MDTopAppBarTrailingButtonContainer:
                 MDActionTopAppBarButton:
                     icon: "cog"
                     theme_icon_color: "Custom"
-                    icon_color: 1, 1, 1, 1
+                    icon_color: (0, 0, 0, 1) if self.theme_cls.theme_style == "Light" else (1, 1, 1, 1)
                     on_release: root.manager.current = 'settings'
                 
                 MDActionTopAppBarButton:
                     icon: "logout"
                     theme_icon_color: "Custom"
-                    icon_color: 1, 1, 1, 1
+                    icon_color: (0, 0, 0, 1) if self.theme_cls.theme_style == "Light" else (1, 1, 1, 1)
                     on_release: root.handle_logout()
 
         MDBoxLayout:
@@ -110,8 +111,9 @@
         MDFabButton:
             icon: "plus"
             style: "standard"
+            # FORCE FAB VISIBILITY
             theme_icon_color: "Custom"
-            icon_color: 1, 1, 1, 1
-            md_bg_color: 0.4, 0.2, 0.6, 1
-            pos_hint: {"center_x": .88, "center_y": .12} # Moved UP from .08
+            icon_color: (1, 1, 1, 1)
+            md_bg_color: self.theme_cls.primaryColor
+            pos_hint: {"center_x": .88, "center_y": .15} # Moved even HIGHER
             on_release: root.go_to_add_task()

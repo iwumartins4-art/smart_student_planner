@@ -38,33 +38,36 @@ jobs:
         run: |
           # Create a writable SDK root in the home directory
           mkdir -p $HOME/android-sdk
-          # Download API 33 components into our writable folder
-          # This ensures we have a "private" SDK that won't be blocked by permissions
-          /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platforms;android-33" "build-tools;33.0.0" "platform-tools"
+          # Download API 33 components and ACCEPT ALL LICENSES
+          # This ensures we have a fully valid SDK that Buildozer won't try to "fix"
+          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platforms;android-33" "build-tools;33.0.0" "platform-tools" > /dev/null
 
       - name: Cache Buildozer
         uses: actions/cache@v4
         with:
           path: .buildozer
-          # Increment to v3 to purge any state from the failed Build #18
-          key: ${{ runner.os }}-buildozer-v3-${{ hashFiles('buildozer.spec') }}
+          # Increment to v21 for a totally fresh, high-quality build
+          key: ${{ runner.os }}-buildozer-v21-${{ hashFiles('buildozer.spec') }}
           restore-keys: |
-            ${{ runner.os }}-buildozer-v3-
+            ${{ runner.os }}-buildozer-v21-
 
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:~/.local/bin
           
-          # HIJACK AUDIT: Verify the manual SDK contains API 33
-          echo "HIJACK AUDIT: Listing manual SDK content..."
-          [ -d "$HOME/android-sdk/platforms/android-33" ] && echo "SUCCESS: API 33 found in manual SDK." || echo "ERROR: API 33 MISSING!"
+          # SURGICAL HIJACK (Restored): Force Buildozer to use our manual SDK
+          mkdir -p .buildozer/android/platform/
+          rm -rf .buildozer/android/platform/android-sdk
+          ln -s $HOME/android-sdk .buildozer/android/platform/android-sdk
           
-          # Final build command with EXPLICIT SDK paths to force p4a's hand
+          # HIJACK AUDIT: Verify the manual SDK contains API 33
+          echo "HIJACK AUDIT: Listing internal SDK content..."
+          [ -d ".buildozer/android/platform/android-sdk/platforms/android-33" ] && echo "SUCCESS: API 33 found in hijacked path." || echo "ERROR: API 33 MISSING!"
+          
+          # Final build command
           buildozer -v android debug
         env:
           USER: runner
-          ANDROIDSDK: /home/runner/android-sdk
-          ANDROID_SDK_ROOT: /home/runner/android-sdk
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

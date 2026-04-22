@@ -30,8 +30,11 @@ jobs:
           sudo apt update
           sudo apt install -y git zip unzip python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev libsqlite3-dev
           pip install --upgrade pip
-          pip install git+https://github.com/kivy/buildozer.git@master "cython>=3.0.0,<3.1.0" colorama
-          # Pre-accept SDK licenses for the runner's SDK (helps with environment detection)
+          # Install Buildozer first, then force the correct Cython version for Kivy 2.3.1
+          pip install git+https://github.com/kivy/buildozer.git@master colorama
+          pip install --upgrade "cython>=3.0.0,<3.1.0"
+          # Pre-accept SDK licenses and ensure sdkmanager is usable
+          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/tools/bin
           yes | sdkmanager --licenses || true
 
       - name: Cache Buildozer

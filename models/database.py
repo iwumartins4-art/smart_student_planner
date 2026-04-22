@@ -15,13 +15,20 @@ class Database:
         if self.initialized: return
         
         try:
+            from kivymd.app import MDApp
             from kivy.utils import platform
             
             # Determine a writable directory based on the platform
             if platform == 'android':
-                # On Android, use the app's private files directory
-                from android.storage import app_storage_path
-                base_path = app_storage_path()
+                # On Android, use the app's official private data directory
+                # This is more stable than manually importing android.storage
+                app = MDApp.get_running_app()
+                if app:
+                    base_path = app.user_data_dir
+                else:
+                    # Fallback if App isn't running yet (though it should be)
+                    from os.path import expanduser
+                    base_path = expanduser("~")
             else:
                 # On Desktop, use the project root
                 base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

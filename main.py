@@ -11,11 +11,8 @@ from kivy.utils import platform
 if platform in ['win', 'linux', 'macosx']:
     Window.size = (360, 640)
 
-# Robust path detection for mobile
-if platform == 'android':
-    PROJECT_ROOT = os.environ.get('PYTHONPATH', '.').split(':')[0]
-else:
-    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+# Absolute path loading to prevent file-not-found errors
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 if PROJECT_ROOT not in sys.path:
     sys.path.append(PROJECT_ROOT)
@@ -46,4 +43,16 @@ class SmartStudentPlanner(MDApp):
         return sm
 
 if __name__ == "__main__":
-    SmartStudentPlanner().run()
+    try:
+        SmartStudentPlanner().run()
+    except Exception:
+        import traceback
+        # Save crash log to a place where the user can find it
+        # On Android, this is usually /data/user/0/com.supsavetech.smart_student_planner/files
+        log_path = os.path.join(os.path.expanduser("~"), "CRASH_LOG.txt")
+        with open(log_path, "w") as f:
+            f.write("--- SMART STUDENT PLANNER CRASH LOG ---\n")
+            f.write(traceback.format_exc())
+        
+        # Re-raise so the system still knows it crashed
+        raise

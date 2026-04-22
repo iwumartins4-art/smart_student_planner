@@ -30,48 +30,41 @@ jobs:
           sudo apt update
           sudo apt install -y git zip unzip python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev libsqlite3-dev
           pip install --upgrade pip
-          # Install latest Buildozer and correct Cython version
+          # Use Cython < 3.0 to match the newest Buildozer requirements
           pip install git+https://github.com/kivy/buildozer.git@master colorama
-          pip install --upgrade "cython>=3.0.0,<3.1.0"
+          pip install "cython>=0.29.33,<3.0.0"
 
       - name: Manual SDK Setup
         run: |
           # Create a writable SDK root in the home directory
           mkdir -p $HOME/android-sdk
-          # Use system tool to install missing API 33 components into our writable folder
-          # This bypasses Buildozer's own downloader bugs
-          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platforms;android-33" "build-tools;33.0.0" "platform-tools" > /dev/null
+          # Download API 33 components into our writable folder
+          # This ensures we have a "private" SDK that won't be blocked by permissions
+          /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platforms;android-33" "build-tools;33.0.0" "platform-tools"
 
       - name: Cache Buildozer
         uses: actions/cache@v4
         with:
           path: .buildozer
-          # Reset cache to v2 to purge poisoned/corrupt state
-          key: ${{ runner.os }}-buildozer-v2-${{ hashFiles('buildozer.spec') }}
+          # Increment to v3 to purge any state from the failed Build #18
+          key: ${{ runner.os }}-buildozer-v3-${{ hashFiles('buildozer.spec') }}
           restore-keys: |
-            ${{ runner.os }}-buildozer-v2-
+            ${{ runner.os }}-buildozer-v3-
 
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:~/.local/bin
           
-          # SURGICAL HIJACK: Force Buildozer to use our manual SDK
-          # 1. Pre-create the exact internal directory layout Buildozer wants
-          mkdir -p .buildozer/android/platform/
+          # HIJACK AUDIT: Verify the manual SDK contains API 33
+          echo "HIJACK AUDIT: Listing manual SDK content..."
+          [ -d "$HOME/android-sdk/platforms/android-33" ] && echo "SUCCESS: API 33 found in manual SDK." || echo "ERROR: API 33 MISSING!"
           
-          # 2. Symlink our writable home SDK into the project's internal folder
-          # This "tricks" Buildozer into seeing the SDK as already installed
-          rm -rf .buildozer/android/platform/android-sdk
-          ln -s $HOME/android-sdk .buildozer/android/platform/android-sdk
-          
-          # 3. Diagnostic Folder Audit
-          echo "HIJACK AUDIT: Listing internal SDK content..."
-          [ -d ".buildozer/android/platform/android-sdk/platforms" ] && ls -la .buildozer/android/platform/android-sdk/platforms || echo "ERROR: SDK not found at hijack path!"
-          
-          # Final build command
+          # Final build command with EXPLICIT SDK paths to force p4a's hand
           buildozer -v android debug
         env:
           USER: runner
+          ANDROIDSDK: /home/runner/android-sdk
+          ANDROID_SDK_ROOT: /home/runner/android-sdk
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

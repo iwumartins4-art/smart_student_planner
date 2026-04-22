@@ -46,16 +46,29 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .buildozer
-          key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
+          # Reset cache to v2 to purge poisoned/corrupt state
+          key: ${{ runner.os }}-buildozer-v2-${{ hashFiles('buildozer.spec') }}
           restore-keys: |
-            ${{ runner.os }}-buildozer-
+            ${{ runner.os }}-buildozer-v2-
 
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:~/.local/bin
-          # Force Buildozer to use our manually prepared writable SDK
-          export ANDROID_HOME=$HOME/android-sdk
-          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          
+          # SURGICAL HIJACK: Force Buildozer to use our manual SDK
+          # 1. Pre-create the exact internal directory layout Buildozer wants
+          mkdir -p .buildozer/android/platform/
+          
+          # 2. Symlink our writable home SDK into the project's internal folder
+          # This "tricks" Buildozer into seeing the SDK as already installed
+          rm -rf .buildozer/android/platform/android-sdk
+          ln -s $HOME/android-sdk .buildozer/android/platform/android-sdk
+          
+          # 3. Diagnostic Folder Audit
+          echo "HIJACK AUDIT: Listing internal SDK content..."
+          [ -d ".buildozer/android/platform/android-sdk/platforms" ] && ls -la .buildozer/android/platform/android-sdk/platforms || echo "ERROR: SDK not found at hijack path!"
+          
+          # Final build command
           buildozer -v android debug
         env:
           USER: runner

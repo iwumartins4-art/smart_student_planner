@@ -57,15 +57,15 @@
 
                 MDBoxLayout:
                     orientation: 'vertical'
-                    spacing: dp(8)
-                    size_hint_y: None
-                    height: self.minimum_height
+                    spacing: dp(12)
+                    adaptive_height: True
 
                     MDLabel:
-                        text: "Version: 3.0.0 (Material 3)"
+                        text: "Version: 3.0.1 (Material 3)"
                         theme_text_color: "Secondary"
                         font_style: "Label"
                         role: "large"
+                        adaptive_height: True
 
                     MDLabel:
                         text: "STUDENT NAME: MARTINS CHINATU IWU"
@@ -73,15 +73,18 @@
                         font_style: "Label"
                         role: "large"
                         bold: True
+                        adaptive_height: True
 
                     MDLabel:
                         text: "STUDENT NUMBER: 250310429"
                         theme_text_color: "Secondary"
                         font_style: "Label"
                         role: "medium"
+                        adaptive_height: True
 
                     MDLabel:
                         text: "Platform: KivyMD Cross-Platform Engine"
                         theme_text_color: "Secondary"
                         font_style: "Label"
                         role: "small"
+                        adaptive_height: True

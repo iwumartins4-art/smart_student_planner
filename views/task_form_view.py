@@ -31,6 +31,10 @@ class TaskFormView(MDScreen):
     def open_priority_menu(self):
         from kivymd.uix.menu import MDDropdownMenu
         
+        # Ensure only one menu is active
+        if hasattr(self, 'menu') and self.menu:
+            self.menu.dismiss()
+            
         menu_items = [
             {
                 "text": f"{i}",

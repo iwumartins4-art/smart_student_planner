@@ -18,7 +18,7 @@ source.include_exts = py,png,jpg,kv,db
 # (str) Application versioning (method 1)
 version = 2.0.0
 
-requirements = python3, kivy==2.3.1, https://github.com/kivymd/KivyMD/archive/master.zip, pillow, materialyoucolor, requests, android
+requirements = python3, kivy==2.3.1, https://github.com/kivymd/KivyMD/archive/master.zip, pillow, materialyoucolor, requests, android, filetype
 
 # (str) Custom source folders for requirements
 # packagers often need orientation restricted for student apps

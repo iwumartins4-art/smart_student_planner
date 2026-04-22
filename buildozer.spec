@@ -48,6 +48,9 @@ android.accept_sdk_license = True
 icon.filename = %(source.dir)s/icon.png
 presplash.filename = %(source.dir)s/presplash.png
 
+# (str) python-for-android branch to use
+p4a.branch = master
+
 [buildozer]
 
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))

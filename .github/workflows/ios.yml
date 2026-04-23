@@ -45,19 +45,25 @@ jobs:
           echo "Cleaning up dist-info metadata to save bundle space..."
           rm -rf *.dist-info
 
-      - name: Build iOS Xcode Project with Buildozer
-        # This will take a long time (30+ mins) as it compiles Python and Kivy from C source code for iOS arm64.
-        # || true is added because sometimes buildozer throws a non-fatal warning at the end that causes GH to fail.
+      - name: Build iOS Xcode Project (Native Kivy-iOS)
+        # This bypasses Buildozer's buggy ios-deploy compilation entirely
         run: |
-          buildozer ios debug || true
-
+          echo "Installing Kivy-iOS toolchain..."
+          git clone https://github.com/kivy/kivy-ios.git
+          cd kivy-ios
+          pip install -e .
+          
+          echo "Building Python, Kivy, and Pillow for iOS..."
+          python3 toolchain.py build python3 kivy pillow
+          
+          echo "Creating Xcode Project..."
+          python3 toolchain.py create "SmartStudentPlanner" ../
+          
       - name: Locate and Package Xcode Project
         run: |
           echo "Packaging the final Xcode project..."
-          # The iOS project is generated deep inside .buildozer
-          cd .buildozer/ios/platform/kivy-ios
-          # We zip the entire project folder generated
-          zip -r ../../../../ios-project-source.zip smart_student_planner-ios/
+          cd kivy-ios
+          zip -r ../ios-project-source.zip smartstudentplanner-ios/
 
       - name: Upload iOS Xcode Project Artifact
         uses: actions/upload-artifact@v4

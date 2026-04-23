@@ -54,6 +54,17 @@ p4a.branch = master
 # (str) Path to Android SDK
 android.sdk_path = /home/runner/android-sdk
 
+# --- iOS Specific Settings ---
+
+# (str) Kivy-ios branch to use
+ios.kivy_ios_branch = master
+
+# (bool) whether to build a universal framework or just one for arm64
+ios.modern = True
+
+# (bool) build without codesigning
+ios.codesign.allowed = false
+
 [buildozer]
 
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))

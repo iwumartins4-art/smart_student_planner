@@ -37,6 +37,7 @@ jobs:
           sed -i '' 's|asynckivy, ||g' buildozer.spec
           sed -i '' 's|asyncgui, ||g' buildozer.spec
           sed -i '' 's|exceptiongroup, ||g' buildozer.spec
+          sed -i '' 's|android, ||g' buildozer.spec
           
           echo "Bundling KivyMD and pure Python dependencies locally..."
           pip install https://github.com/kivymd/KivyMD/archive/master.zip materialshapes materialyoucolor asynckivy asyncgui exceptiongroup --no-deps -t ./

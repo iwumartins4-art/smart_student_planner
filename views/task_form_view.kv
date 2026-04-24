@@ -5,20 +5,20 @@
 
         MDTopAppBar:
             type: "small"
-            md_bg_color: 0.4, 0.2, 0.6, 1
+            md_bg_color: self.theme_cls.surfaceColor
             
             MDTopAppBarLeadingButtonContainer:
                 MDActionTopAppBarButton:
                     icon: "arrow-left"
                     theme_icon_color: "Custom"
-                    icon_color: 1, 1, 1, 1
+                    icon_color: (0, 0, 0, 1) if self.theme_cls.theme_style == "Light" else (1, 1, 1, 1)
                     on_release: root.go_back()
             
             MDTopAppBarTitle:
                 id: form_title
                 text: "Add Task"
                 theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
+                text_color: (0, 0, 0, 1) if self.theme_cls.theme_style == "Light" else (1, 1, 1, 1)
 
         ScrollView:
             MDBoxLayout:

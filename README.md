@@ -44,6 +44,28 @@ The repository features fully automated GitHub Actions workflows:
 - **iOS (`.github/workflows/ios.yml`)**: Uses macOS runners and a direct Kivy-iOS `toolchain.py` strategy to compile an Apple `.xcodeproj`. 
   - *Note: To sidestep KivyMD `pycairo` cross-compilation errors on iOS, the workflow programmatically strips non-essential dependencies and dynamically bundles pure-Python libraries.*
 
+## 📥 Downloading & Installing Artifacts
+
+When a commit is pushed, GitHub Actions will compile the app and generate downloadable artifacts.
+
+### 🤖 Android (.apk)
+1. Go to the **[Actions](../../actions)** tab of this repository.
+2. Click on the latest successful **Android Build** run.
+3. Scroll to the bottom under **Artifacts** and download `SmartStudentPlanner-APK`.
+4. Transfer the `.apk` file to your Android device.
+5. Open the file on your device (ensure "Install from Unknown Sources" is enabled in settings) to install.
+
+### 🍏 Apple iOS (.xcodeproj)
+1. Go to the **[Actions](../../actions)** tab of this repository.
+2. Click on the latest successful **iOS Build** run.
+3. Scroll to the bottom under **Artifacts** and download `ios-xcode-project`.
+4. **Important macOS Requirement**: Apple restricts iOS compilation to macOS environments. Because Kivy-iOS compiles libraries using absolute paths on the cloud runner, you must reconstruct the paths locally on a Mac device to deploy the `.ipa` via Xcode.
+   - Extract the source code to your local macOS device.
+   - Clone Kivy-iOS: `git clone https://github.com/kivy/kivy-ios.git`
+   - Build the libraries locally: `python3 toolchain.py build python3 kivy pillow`
+   - Create the project: `python3 toolchain.py create "SmartStudentPlanner" <path_to_source>`
+   - Open the generated Xcode project locally and deploy to your iPhone!
+
 ## 📝 Design Decisions
 - **SQLite vs JSON**: SQLite was chosen for its atomic properties and relational structure, ensuring better data integrity for a "Student" application where loss of assignment data is critical.
 - **MVVM Integration**: Implementing MVVM completely removes the "God Object" anti-pattern in Kivy, separating UI styling (`.kv`) from logic (`.py`).

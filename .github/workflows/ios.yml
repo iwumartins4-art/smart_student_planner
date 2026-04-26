@@ -62,10 +62,17 @@ jobs:
       - name: iOS Headless Simulator Smoke Test
         run: |
           echo "Compiling for iOS Simulator (iphonesimulator)..."
-          # Navigate to root where the Xcode project was generated
-          cd ..
+          # The Xcode project lives inside kivy-ios/ where toolchain.py created it
+          cd kivy-ios
           # Build the simulator binary without code signing, outputting to a known SYMROOT
-          xcodebuild -project smartstudentplanner-ios/smartstudentplanner.xcodeproj -scheme smartstudentplanner -destination 'platform=iOS Simulator,name=iPhone 15' -configuration Debug SYMROOT=$(PWD)/build build CODE_SIGNING_ALLOWED=NO
+          xcodebuild \
+            -project smartstudentplanner-ios/smartstudentplanner.xcodeproj \
+            -scheme smartstudentplanner \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            -configuration Debug \
+            SYMROOT=$(PWD)/build \
+            CODE_SIGNING_ALLOWED=NO \
+            build
           
           echo "Booting Headless iPhone 15 Simulator..."
           xcrun simctl boot "iPhone 15" || true
@@ -92,7 +99,7 @@ jobs:
           else
             echo "✅ Smoke Test Passed! No Python fatal errors detected."
           fi
-          
+
 
       - name: Locate and Package Xcode Project
         run: |

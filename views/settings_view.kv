@@ -1,23 +1,23 @@
 <SettingsView>:
     MDBoxLayout:
         orientation: 'vertical'
-        md_bg_color: self.theme_cls.backgroundColor
+        md_bg_color: app.theme_cls.backgroundColor
 
         MDTopAppBar:
             type: "small"
-            md_bg_color: self.theme_cls.surfaceColor
+            md_bg_color: app.theme_cls.surfaceColor
             
             MDTopAppBarLeadingButtonContainer:
                 MDActionTopAppBarButton:
                     icon: "arrow-left"
                     theme_icon_color: "Custom"
-                    icon_color: (0, 0, 0, 1) if self.theme_cls.theme_style == "Light" else (1, 1, 1, 1)
+                    icon_color: (0, 0, 0, 1) if app.theme_cls.theme_style == "Light" else (1, 1, 1, 1)
                     on_release: root.go_back()
             
             MDTopAppBarTitle:
                 text: "App Settings"
                 theme_text_color: "Custom"
-                text_color: (0, 0, 0, 1) if self.theme_cls.theme_style == "Light" else (1, 1, 1, 1)
+                text_color: (0, 0, 0, 1) if app.theme_cls.theme_style == "Light" else (1, 1, 1, 1)
 
         ScrollView:
             MDBoxLayout:
@@ -43,7 +43,7 @@
                         theme_text_color: "Primary"
                     
                     MDSwitch:
-                        active: True if self.theme_cls.theme_style == "Dark" else False
+                        active: True if app.theme_cls.theme_style == "Dark" else False
                         on_active: root.toggle_theme()
                         pos_hint: {"center_y": .5}
 
@@ -61,7 +61,7 @@
                     adaptive_height: True
 
                     MDLabel:
-                        text: "Version: 3.0.1 (Material 3)"
+                        text: "Version: 3.0.2 (Material 3)"
                         theme_text_color: "Secondary"
                         font_style: "Label"
                         role: "large"

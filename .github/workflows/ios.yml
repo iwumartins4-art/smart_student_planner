@@ -59,6 +59,41 @@ jobs:
           echo "Creating Xcode Project..."
           python3 toolchain.py create "SmartStudentPlanner" ../
           
+      - name: iOS Headless Simulator Smoke Test
+        run: |
+          echo "Compiling for iOS Simulator (iphonesimulator)..."
+          # Navigate to root where the Xcode project was generated
+          cd ..
+          # Build the simulator binary without code signing, outputting to a known SYMROOT
+          xcodebuild -project smartstudentplanner-ios/smartstudentplanner.xcodeproj -scheme smartstudentplanner -destination 'platform=iOS Simulator,name=iPhone 15' -configuration Debug SYMROOT=$(PWD)/build build CODE_SIGNING_ALLOWED=NO
+          
+          echo "Booting Headless iPhone 15 Simulator..."
+          xcrun simctl boot "iPhone 15" || true
+          
+          echo "Installing App payload into Simulator..."
+          xcrun simctl install "iPhone 15" build/Debug-iphonesimulator/smartstudentplanner.app
+          
+          echo "Launching App and monitoring for crashes (20s)..."
+          # Launch in console mode, pipe to file, run in background
+          xcrun simctl launch --console "iPhone 15" org.kivy.smartstudentplanner > simulator_log.txt 2>&1 &
+          
+          # Wait 20 seconds for Kivy initialization and database creation
+          sleep 20
+          
+          echo "Analyzing Simulator Logs:"
+          cat simulator_log.txt
+          
+          if grep -q "Traceback (most recent call last)" simulator_log.txt; then
+            echo "::error::Python Traceback detected in Simulator! The app crashed."
+            exit 1
+          elif grep -q "PermissionError" simulator_log.txt; then
+            echo "::error::PermissionError detected in Simulator!"
+            exit 1
+          else
+            echo "✅ Smoke Test Passed! No Python fatal errors detected."
+          fi
+          
+
       - name: Locate and Package Xcode Project
         run: |
           echo "Packaging the final Xcode project..."

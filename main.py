@@ -7,7 +7,7 @@ import os
 
 from kivy.utils import platform
 
-# Set window size only for desktop simulation
+# Set window size only for desktop simulation #
 if platform in ['win', 'linux', 'macosx']:
     Window.size = (360, 640)
 

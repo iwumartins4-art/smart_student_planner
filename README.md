@@ -78,3 +78,4 @@ When a commit is pushed, GitHub Actions will compile the app and generate downlo
   - Google Calendar API Integration.
   - Push notifications for approaching deadlines.
   - Cloud database synchronization (Firebase/Supabase) for multi-device support.
+# smart_student_planner

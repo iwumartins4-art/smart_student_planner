@@ -3,9 +3,10 @@
     height: dp(90)
     padding: dp(8)
     spacing: dp(8)
-    radius: dp(12)
+    radius: dp(16)
     style: "elevated"
     md_bg_color: app.theme_cls.surfaceColor
+    elevation: 2
     
     MDBoxLayout:
         orientation: "horizontal"
@@ -22,6 +23,7 @@
         MDBoxLayout:
             orientation: "vertical"
             spacing: dp(2)
+            pos_hint: {"center_y": .5}
             
             MDLabel:
                 text: root.title
@@ -29,12 +31,14 @@
                 font_style: "Title"
                 role: "medium"
                 strikethrough: root.is_completed
+                adaptive_height: True
                 
             MDLabel:
                 text: f"{root.module} • {root.due_date}"
                 theme_text_color: "Secondary"
                 font_style: "Label"
                 role: "medium"
+                adaptive_height: True
 
         # Interactive Controls
         MDBoxLayout:
@@ -70,6 +74,12 @@
 
             MDTopAppBarTrailingButtonContainer:
                 MDActionTopAppBarButton:
+                    icon: "account-circle"
+                    theme_icon_color: "Custom"
+                    icon_color: (0, 0, 0, 1) if app.theme_cls.theme_style == "Light" else (1, 1, 1, 1)
+                    on_release: root.manager.current = 'user'
+
+                MDActionTopAppBarButton:
                     icon: "cog"
                     theme_icon_color: "Custom"
                     icon_color: (0, 0, 0, 1) if app.theme_cls.theme_style == "Light" else (1, 1, 1, 1)
@@ -86,6 +96,46 @@
             padding: dp(16)
             spacing: dp(16)
 
+            # Dashboard Summary Card
+            MDCard:
+                size_hint_y: None
+                height: dp(100)
+                padding: dp(16)
+                radius: dp(20)
+                style: "filled"
+                md_bg_color: app.theme_cls.primaryColor
+                
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    spacing: dp(20)
+                    
+                    MDBoxLayout:
+                        orientation: "vertical"
+                        size_hint_x: 0.4
+                        
+                        MDLabel:
+                            text: "Your Progress"
+                            theme_text_color: "Custom"
+                            text_color: app.theme_cls.onPrimaryColor
+                            font_style: "Title"
+                            role: "small"
+                        
+                        MDLabel:
+                            text: f"{root.completed_count} / {root.total_count} Tasks"
+                            theme_text_color: "Custom"
+                            text_color: app.theme_cls.onPrimaryColor
+                            font_style: "Headline"
+                            role: "small"
+                            bold: True
+                    
+                    MDAnchorLayout:
+                        anchor_x: "right"
+                        MDIcon:
+                            icon: "chart-donut"
+                            font_size: dp(48)
+                            theme_icon_color: "Custom"
+                            icon_color: app.theme_cls.onPrimaryColor
+
             MDTextField:
                 id: search_field
                 mode: "outlined"
@@ -97,6 +147,13 @@
                 MDTextFieldLeadingIcon:
                     icon: "magnify"
 
+            MDLabel:
+                text: "Today's Schedule"
+                font_style: "Title"
+                role: "medium"
+                adaptive_height: True
+                padding: [dp(4), 0, 0, 0]
+
             ScrollView:
                 bar_width: 0
                 MDBoxLayout:
@@ -105,13 +162,14 @@
                     spacing: dp(12)
                     size_hint_y: None
                     height: self.minimum_height
-                    padding: [0, 0, 0, dp(80)] # Bottom padding for FAB
+                    padding: [0, 0, 0, dp(80)]
 
     MDFabButton:
         icon: "plus"
-        style: "standard"
+        style: "large"
+        theme_bg_color: "Custom"
+        md_bg_color: app.theme_cls.primaryColor
         theme_icon_color: "Custom"
-        icon_color: (1, 1, 1, 1)
-        md_bg_color: (0.4, 0.2, 0.6, 1)
-        pos_hint: {"center_x": .88, "center_y": .15}
+        icon_color: app.theme_cls.onPrimaryColor
+        pos_hint: {"center_x": .88, "center_y": .12}
         on_release: root.go_to_add_task()

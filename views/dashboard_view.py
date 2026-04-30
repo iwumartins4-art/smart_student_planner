@@ -1,10 +1,11 @@
 from kivymd.uix.screen import MDScreen
 from viewmodels.task_viewmodel import TaskViewModel
-from kivymd.uix.list import MDListItem, MDListItemHeadlineText, MDListItemSupportingText, MDListItemTertiaryText
 from kivymd.uix.card import MDCard
 from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
+from kivymd.uix.dialog import MDDialog, MDDialogIcon, MDDialogHeadlineText, MDDialogSupportingText, MDDialogButtonContainer
+from kivymd.uix.button import MDButton, MDButtonText
 from kivy.clock import Clock
-from kivy.properties import StringProperty, ObjectProperty, BooleanProperty
+from kivy.properties import StringProperty, ObjectProperty, BooleanProperty, NumericProperty
 
 class TaskCard(MDCard):
     title = StringProperty()
@@ -28,9 +29,13 @@ class TaskCard(MDCard):
             self.ids.priority_bar.md_bg_color = (0.2, 0.6, 0.2, 1) # Green
 
 class DashboardView(MDScreen):
+    total_count = NumericProperty(0)
+    completed_count = NumericProperty(0)
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.viewmodel = TaskViewModel()
+        self.dialog = None
 
     def on_enter(self):
         self.refresh_tasks()
@@ -39,6 +44,9 @@ class DashboardView(MDScreen):
         try:
             tasks = self.viewmodel.get_tasks(search_query)
             self.ids.task_list.clear_widgets()
+            
+            self.total_count = len(tasks)
+            self.completed_count = sum(1 for t in tasks if t[6]) # index 6 is is_completed
             
             for task in tasks:
                 # task structure: (id, title, module, due_date, priority, notes, is_completed)
@@ -54,7 +62,7 @@ class DashboardView(MDScreen):
                 )
                 # Link actions
                 card.ids.check_btn.bind(on_release=lambda x, tid=tid, status=completed: self.toggle_task(tid, status))
-                card.ids.delete_btn.bind(on_release=lambda x, tid=tid: self.delete_task(tid))
+                card.ids.delete_btn.bind(on_release=lambda x, tid=tid: self.confirm_delete(tid))
                 card.bind(on_release=lambda x, t=task: self.edit_task(t))
                 
                 self.ids.task_list.add_widget(card)
@@ -66,7 +74,33 @@ class DashboardView(MDScreen):
         self.refresh_tasks()
         MDSnackbar(MDSnackbarText(text="Task status updated")).open()
 
+    def confirm_delete(self, task_id):
+        self.dialog = MDDialog(
+            MDDialogIcon(icon="delete-alert"),
+            MDDialogHeadlineText(text="Delete Task?"),
+            MDDialogSupportingText(text="This action cannot be undone."),
+            MDDialogButtonContainer(
+                Widget(), # Spacer
+                MDButton(
+                    MDButtonText(text="Cancel"),
+                    style="text",
+                    on_release=lambda x: self.dialog.dismiss()
+                ),
+                MDButton(
+                    MDButtonText(text="Delete"),
+                    style="tonal",
+                    theme_bg_color="Custom",
+                    md_bg_color=(0.8, 0.2, 0.2, 1),
+                    on_release=lambda x, tid=task_id: self.delete_task(tid)
+                ),
+                spacing="8dp",
+            ),
+        )
+        self.dialog.open()
+
     def delete_task(self, task_id):
+        if self.dialog:
+            self.dialog.dismiss()
         self.viewmodel.delete_task(task_id)
         self.refresh_tasks()
         MDSnackbar(MDSnackbarText(text="Task deleted")).open()
@@ -81,3 +115,5 @@ class DashboardView(MDScreen):
 
     def handle_logout(self):
         self.manager.current = 'login'
+
+from kivy.uix.widget import Widget # Required for MDDialog spacer

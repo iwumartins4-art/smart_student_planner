@@ -30,6 +30,7 @@ class SmartStudentPlanner(MDApp):
         Builder.load_file(os.path.join(PROJECT_ROOT, 'views', 'dashboard_view.kv'))
         Builder.load_file(os.path.join(PROJECT_ROOT, 'views', 'task_form_view.kv'))
         Builder.load_file(os.path.join(PROJECT_ROOT, 'views', 'settings_view.kv'))
+        Builder.load_file(os.path.join(PROJECT_ROOT, 'views', 'user_view.kv'))
  
         from kivy.uix.screenmanager import ScreenManager
         from views.login_view import LoginView
@@ -37,6 +38,7 @@ class SmartStudentPlanner(MDApp):
         from views.dashboard_view import DashboardView
         from views.task_form_view import TaskFormView
         from views.settings_view import SettingsView
+        from views.user_view import UserView
 
         sm = ScreenManager()
         sm.add_widget(LoginView(name='login'))
@@ -44,6 +46,7 @@ class SmartStudentPlanner(MDApp):
         sm.add_widget(DashboardView(name='dashboard'))
         sm.add_widget(TaskFormView(name='task_form'))
         sm.add_widget(SettingsView(name='settings'))
+        sm.add_widget(UserView(name='user'))
         
         return sm
 
@@ -59,6 +62,7 @@ if __name__ == "__main__":
         from views.dashboard_view import DashboardView
         from views.task_form_view import TaskFormView
         from views.settings_view import SettingsView
+        from views.user_view import UserView
         
         SmartStudentPlanner().run()
         

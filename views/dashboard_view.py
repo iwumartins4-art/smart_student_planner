@@ -1,4 +1,6 @@
+from kivy.uix.widget import Widget
 from kivymd.uix.screen import MDScreen
+from kivymd.app import MDApp
 from viewmodels.task_viewmodel import TaskViewModel
 from kivymd.uix.card import MDCard
 from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
@@ -47,6 +49,11 @@ class DashboardView(MDScreen):
             
             self.total_count = len(tasks)
             self.completed_count = sum(1 for t in tasks if t[6]) # index 6 is is_completed
+            
+            if not tasks:
+                self.ids.empty_label.opacity = 1
+            else:
+                self.ids.empty_label.opacity = 0
             
             for task in tasks:
                 # task structure: (id, title, module, due_date, priority, notes, is_completed)
@@ -113,7 +120,36 @@ class DashboardView(MDScreen):
         self.manager.get_screen('task_form').clear_form()
         self.manager.current = 'task_form'
 
-    def handle_logout(self):
-        self.manager.current = 'login'
+    def confirm_logout(self):
+        self.dialog = MDDialog(
+            MDDialogIcon(icon="logout"),
+            MDDialogHeadlineText(text="Logout?"),
+            MDDialogSupportingText(text="Are you sure you want to log out of your account?"),
+            MDDialogButtonContainer(
+                Widget(),
+                MDButton(
+                    MDButtonText(text="Cancel"),
+                    style="text",
+                    on_release=lambda x: self.dialog.dismiss()
+                ),
+                MDButton(
+                    MDButtonText(text="Logout"),
+                    style="tonal",
+                    on_release=lambda x: self.handle_logout()
+                ),
+                spacing="8dp",
+            ),
+        )
+        self.dialog.open()
 
-from kivy.uix.widget import Widget # Required for MDDialog spacer
+    def handle_logout(self):
+        if self.dialog:
+            self.dialog.dismiss()
+        
+        login_screen = self.manager.get_screen('login')
+        login_screen.clear_fields()
+        
+        app = MDApp.get_running_app()
+        app.user_data = {}
+        
+        self.manager.current = 'login'

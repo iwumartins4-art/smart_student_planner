@@ -69,7 +69,39 @@ class Database:
                 is_completed INTEGER DEFAULT 0
             )
         ''')
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                full_name TEXT,
+                username TEXT UNIQUE NOT NULL,
+                email TEXT,
+                password TEXT NOT NULL,
+                major TEXT,
+                student_id TEXT
+            )
+        ''')
         self.conn.commit()
+
+    def add_user(self, full_name, username, email, password, major, student_id):
+        try:
+            self.cursor.execute('''
+                INSERT INTO users (full_name, username, email, password, major, student_id)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (full_name, username, email, password, major, student_id))
+            self.conn.commit()
+            return True, "User registered successfully"
+        except sqlite3.IntegrityError:
+            return False, "Username already exists"
+        except Exception as e:
+            return False, str(e)
+
+    def authenticate_user(self, username, password):
+        self.cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
+        return self.cursor.fetchone()
+
+    def get_user_by_username(self, username):
+        self.cursor.execute("SELECT * FROM users WHERE username=?", (username,))
+        return self.cursor.fetchone()
 
     def get_all_tasks(self, search_query=None):
         if search_query:

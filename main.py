@@ -17,7 +17,11 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 if PROJECT_ROOT not in sys.path:
     sys.path.append(PROJECT_ROOT)
 
+from kivy.properties import DictProperty
+
 class SmartStudentPlanner(MDApp):
+    user_data = DictProperty({})
+
     def build(self):
         # Certified Material 3 Palette
         self.theme_cls.primary_palette = "Purple"
@@ -52,11 +56,6 @@ class SmartStudentPlanner(MDApp):
 
 if __name__ == "__main__":
     try:
-        # Diagnostic Path Audit
-        print(f"[BOOT] PROJECT_ROOT: {PROJECT_ROOT}")
-        print(f"[BOOT] Initializing Smart Student Planner...")
-
-        # Lazy Imports to catch early-stage crashes during import
         from views.login_view import LoginView
         from views.register_view import RegisterView
         from views.dashboard_view import DashboardView

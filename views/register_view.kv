@@ -14,54 +14,87 @@
             size_hint_y: None
             height: dp(120)
 
-        MDBoxLayout:
-            orientation: 'vertical'
-            spacing: dp(20)
-            size_hint_y: None
-            height: self.minimum_height
-            pos_hint: {'center_y': .5}
+        ScrollView:
+            MDBoxLayout:
+                orientation: 'vertical'
+                spacing: dp(16)
+                padding: [0, dp(16), 0, dp(16)]
+                size_hint_y: None
+                height: self.minimum_height
 
-            MDTextField:
-                id: reg_username
-                mode: "outlined"
-                MDTextFieldHintText:
-                    text: "New Username"
-                MDTextFieldLeadingIcon:
-                    icon: "account-plus"
+                MDTextField:
+                    id: reg_full_name
+                    mode: "outlined"
+                    MDTextFieldHintText:
+                        text: "Full Name"
+                    MDTextFieldLeadingIcon:
+                        icon: "account-card-details"
 
-            MDTextField:
-                id: reg_password
-                mode: "outlined"
-                password: True
-                MDTextFieldHintText:
-                    text: "New Password"
-                MDTextFieldLeadingIcon:
-                    icon: "key-plus"
+                MDTextField:
+                    id: reg_email
+                    mode: "outlined"
+                    MDTextFieldHintText:
+                        text: "Email Address"
+                    MDTextFieldLeadingIcon:
+                        icon: "email"
 
-            MDTextField:
-                id: reg_confirm_password
-                mode: "outlined"
-                password: True
-                MDTextFieldHintText:
-                    text: "Confirm Password"
-                MDTextFieldLeadingIcon:
-                    icon: "key-check"
+                MDTextField:
+                    id: reg_username
+                    mode: "outlined"
+                    MDTextFieldHintText:
+                        text: "Username"
+                    MDTextFieldLeadingIcon:
+                        icon: "account-plus"
 
-            MDButton:
-                style: "filled"
-                size_hint_x: 1
-                on_release: root.handle_register(reg_username.text, reg_password.text, reg_confirm_password.text)
-                MDButtonText:
-                    text: "REGISTER"
-                    pos_hint: {"center_x": .5, "center_y": .5}
+                MDTextField:
+                    id: reg_major
+                    mode: "outlined"
+                    MDTextFieldHintText:
+                        text: "Student Major"
+                    MDTextFieldLeadingIcon:
+                        icon: "school"
 
-            MDButton:
-                style: "text"
-                size_hint_x: 1
-                on_release: root.go_to_login()
-                MDButtonText:
-                    text: "ALREADY HAVE AN ACCOUNT? LOGIN"
-                    pos_hint: {"center_x": .5, "center_y": .5}
+                MDTextField:
+                    id: reg_student_id
+                    mode: "outlined"
+                    MDTextFieldHintText:
+                        text: "Student ID"
+                    MDTextFieldLeadingIcon:
+                        icon: "card-account-details-outline"
+
+                MDTextField:
+                    id: reg_password
+                    mode: "outlined"
+                    password: True
+                    MDTextFieldHintText:
+                        text: "Password"
+                    MDTextFieldLeadingIcon:
+                        icon: "key-plus"
+
+                MDTextField:
+                    id: reg_confirm_password
+                    mode: "outlined"
+                    password: True
+                    MDTextFieldHintText:
+                        text: "Confirm Password"
+                    MDTextFieldLeadingIcon:
+                        icon: "key-check"
+
+                MDButton:
+                    style: "filled"
+                    size_hint_x: 1
+                    on_release: root.handle_register(reg_full_name.text, reg_username.text, reg_email.text, reg_password.text, reg_confirm_password.text, reg_major.text, reg_student_id.text)
+                    MDButtonText:
+                        text: "CREATE ACCOUNT"
+                        pos_hint: {"center_x": .5, "center_y": .5}
+
+                MDButton:
+                    style: "text"
+                    size_hint_x: 1
+                    on_release: root.go_to_login()
+                    MDButtonText:
+                        text: "ALREADY HAVE AN ACCOUNT? LOGIN"
+                        pos_hint: {"center_x": .5, "center_y": .5}
 
         MDLabel:
             text: "Join the Smart Student Community"
@@ -69,3 +102,4 @@
             theme_text_color: "Secondary"
             font_style: "Label"
             role: "medium"
+            adaptive_height: True

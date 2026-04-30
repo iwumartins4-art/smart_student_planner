@@ -3,13 +3,14 @@
 A premium, cross-platform mobile application designed to help students manage their academic tasks effectively. Built with **KivyMD (Material Design 3)** and following strict **MVVM architecture**.
 
 ## ✨ Features
-- **Secure Authentication**: User registration and login flow.
-- **Smart Dashboard**: High-contrast, dynamic overview of academic tasks.
-- **Task Management**: Full CRUD operations with priority levels (Low, Medium, High).
-- **Advanced Search**: Real-time filtering by module name or task title.
-- **High Contrast UI**: Optimized dark and light mode color mapping for maximum legibility.
-- **Reliable Persistence**: SQLite backend ensuring data safety.
-- **Automated CI/CD**: Cloud-based pipeline generating Android (`.apk`) and iOS (`.xcodeproj`) builds automatically on push.
+- **Secure Authentication**: Robust user registration and login flow with database-backed verification.
+- **Smart Dashboard**: High-contrast progress card showing real-time task completion statistics.
+- **Task Management**: Full CRUD operations with priority levels (Low, Medium, High) and delete confirmation.
+- **User Profile**: Dedicated profile view displaying student name, ID, major, and email.
+- **Advanced Search**: Real-time filtering with a clean, compact search bar and empty-state feedback.
+- **High Contrast UI**: Premium Material 3 design optimized for both dark and light modes.
+- **Reliable Persistence**: SQLite backend ensuring academic data is never lost.
+- **Automated CI/CD**: Fully automated pipeline generating Android (`.apk`) builds on every push.
 
 ## 🛠️ Frameworks & Tools
 - **Language**: Python 3.11+
@@ -22,7 +23,7 @@ A premium, cross-platform mobile application designed to help students manage th
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/supsaveTech/smart_student_planner
+   git clone https://github.com/iwumartins4-art/smart_student_planner
    cd smart_student_planner
    ```
 

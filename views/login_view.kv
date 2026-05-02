@@ -1,69 +1,115 @@
 <LoginView>:
     MDBoxLayout:
         orientation: 'vertical'
-        padding: dp(24)
-        spacing: dp(24)
         md_bg_color: self.theme_cls.backgroundColor
-        
-        MDLabel:
-            text: "Smart Student Planner"
-            halign: "center"
-            theme_text_color: "Primary"
-            font_style: "Headline"
-            role: "medium"
-            size_hint_y: None
-            height: dp(120)
+        padding: dp(24)
+        spacing: dp(12)
 
         MDBoxLayout:
             orientation: 'vertical'
-            spacing: dp(20)
+            size_hint_y: None
+            height: dp(320)
+            padding: [0, dp(20), 0, 0]
+            spacing: dp(8)
+
+            MDLabel:
+                text: "Smart Student Planner"
+                halign: "center"
+                theme_text_color: "Primary"
+                font_style: "Headline"
+                role: "medium"
+                bold: True
+
+            MDLabel:
+                text: "Organize. Achieve. Excel."
+                halign: "center"
+                theme_text_color: "Secondary"
+                font_style: "Title"
+                role: "small"
+
+            MDAnchorLayout:
+                anchor_x: "center"
+                Image:
+                    source: "assets/logo.png"
+                    size_hint: None, None
+                    size: dp(160), dp(160)
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            spacing: dp(24)
             size_hint_y: None
             height: self.minimum_height
             pos_hint: {'center_y': .5}
+            padding: [dp(10), dp(20), dp(10), 0]
 
             MDTextField:
                 id: username
                 mode: "outlined"
+                theme_text_color: "Primary"
                 MDTextFieldHintText:
-                    text: "Username"
+                    text: "Username / Email"
                 MDTextFieldLeadingIcon:
-                    icon: "account"
+                    icon: "account-outline"
 
             MDTextField:
                 id: password
                 mode: "outlined"
                 password: True
+                theme_text_color: "Primary"
                 MDTextFieldHintText:
                     text: "Password"
                 MDTextFieldLeadingIcon:
-                    icon: "key"
+                    icon: "lock-outline"
+                MDTextFieldTrailingIcon:
+                    icon: "eye-off-outline"
+
+            MDButton:
+                style: "filled"
+                size_hint_x: 1
+                height: dp(56)
+                on_release: root.handle_login(username.text, password.text)
+                radius: [dp(28), dp(28), dp(28), dp(28)]
+                MDButtonText:
+                    text: "LOGIN"
+                    font_style: "Title"
+                    role: "medium"
+                    bold: True
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+            MDButton:
+                style: "text"
+                size_hint_x: 1
+                on_release: root.manager.current = 'register'
+                MDButtonText:
+                    text: "Don't have an account? Sign Up"
+                    markup: True
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+        Widget: # Spacer
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: dp(120)
+            spacing: dp(16)
+            
+            MDLabel:
+                text: "Or log in with"
+                halign: "center"
+                theme_text_color: "Secondary"
+                font_style: "Label"
+                role: "medium"
 
             MDBoxLayout:
-                orientation: "horizontal"
-                spacing: dp(16)
-                size_hint_x: 1
-                adaptive_height: True
-                padding: [0, dp(12), 0, 0]
+                orientation: 'horizontal'
+                spacing: dp(24)
+                size_hint: None, None
+                width: self.minimum_width
+                pos_hint: {"center_x": .5}
 
-                MDButton:
-                    style: "filled"
-                    size_hint_x: .5
-                    on_release: root.handle_login(username.text, password.text)
-                    MDButtonText:
-                        text: "LOGIN"
-                        pos_hint: {"center_x": .5, "center_y": .5}
-
-                MDButton:
-                    style: "outlined"
-                    size_hint_x: .5
-                    on_release: root.manager.current = 'register'
-                    MDButtonText:
-                        text: "REGISTER"
-                        pos_hint: {"center_x": .5, "center_y": .5}
-
-        MDLabel:
-            text: "Empowering your academic journey"
-            halign: "center"
-            theme_text_color: "Secondary"
-            font_style: "Label"
-            role: "medium"
+                MDIconButton:
+                    icon: "google"
+                MDIconButton:
+                    icon: "apple"
+                MDIconButton:
+                    icon: "microsoft-windows"

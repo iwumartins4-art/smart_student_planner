@@ -1,82 +1,75 @@
 <TaskFormView>:
     MDBoxLayout:
         orientation: 'vertical'
-        md_bg_color: app.theme_cls.backgroundColor
+        md_bg_color: self.theme_cls.backgroundColor
 
         MDTopAppBar:
             type: "small"
-            md_bg_color: app.theme_cls.surfaceColor
-            
+            md_bg_color: self.theme_cls.surfaceContainerColor
             MDTopAppBarLeadingButtonContainer:
                 MDActionTopAppBarButton:
                     icon: "arrow-left"
-                    theme_icon_color: "Custom"
-                    icon_color: (0, 0, 0, 1) if app.theme_cls.theme_style == "Light" else (1, 1, 1, 1)
                     on_release: root.go_back()
-            
             MDTopAppBarTitle:
                 id: form_title
                 text: "Add Task"
-                theme_text_color: "Custom"
-                text_color: (0, 0, 0, 1) if app.theme_cls.theme_style == "Light" else (1, 1, 1, 1)
+                theme_text_color: "Primary"
 
         ScrollView:
             MDBoxLayout:
                 orientation: 'vertical'
                 padding: dp(24)
                 spacing: dp(24)
-                size_hint_y: None
-                height: self.minimum_height
+                adaptive_height: True
 
                 MDTextField:
                     id: title
                     mode: "outlined"
+                    theme_text_color: "Primary"
                     MDTextFieldHintText:
                         text: "Task Title *"
-                    MDTextFieldHelperText:
-                        text: "What needs to be done?"
-                        mode: "on_focus"
 
                 MDTextField:
                     id: module
                     mode: "outlined"
+                    theme_text_color: "Primary"
                     MDTextFieldHintText:
                         text: "Module / Subject"
-                    MDTextFieldHelperText:
-                        text: "e.g., Computer Science"
-                        mode: "on_focus"
 
                 MDBoxLayout:
                     orientation: "horizontal"
                     spacing: dp(12)
-                    size_hint_y: None
-                    height: dp(64)
-                    
+                    adaptive_height: True
                     MDTextField:
                         id: due_date
                         mode: "outlined"
+                        theme_text_color: "Primary"
                         MDTextFieldHintText:
                             text: "Due Date *"
-                        MDTextFieldHelperText:
-                            text: "YYYY-MM-DD"
-                            mode: "persistent"
-
                     MDIconButton:
                         icon: "calendar"
-                        style: "standard"
-                        pos_hint: {"center_y": .4}
+                        pos_hint: {"center_y": .5}
                         on_release: root.show_date_picker()
 
                 MDTextField:
                     id: priority
                     mode: "outlined"
                     readonly: True
+                    theme_text_color: "Primary"
                     on_touch_down: if self.collide_point(*args[1].pos): root.open_priority_menu()
                     MDTextFieldHintText:
                         text: "Priority"
-                    MDTextFieldHelperText:
-                        text: "Tap to select Priority"
-                        mode: "persistent"
+                    MDTextFieldTrailingIcon:
+                        icon: "menu-down"
+
+                MDTextField:
+                    id: status
+                    mode: "outlined"
+                    readonly: True
+                    theme_text_color: "Primary"
+                    on_touch_down: if self.collide_point(*args[1].pos): root.open_status_menu()
+                    MDTextFieldHintText:
+                        text: "Status"
                     MDTextFieldTrailingIcon:
                         icon: "menu-down"
 
@@ -84,6 +77,7 @@
                     id: notes
                     mode: "outlined"
                     multiline: True
+                    theme_text_color: "Primary"
                     MDTextFieldHintText:
                         text: "Additional Notes"
 
@@ -94,8 +88,3 @@
                     MDButtonText:
                         text: "SAVE TASK"
                         pos_hint: {"center_x": .5, "center_y": .5}
-                
-                # Bottom spacing for better reachability
-                MDWidget:
-                    size_hint_y: None
-                    height: dp(100)

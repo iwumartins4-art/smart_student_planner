@@ -26,7 +26,7 @@ A professional-grade mobile application designed to help university students man
 ### Steps
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/supsaveTech/smart_student_planner.git
+   git clone https://github.com/iwumartins4-art/smart_student_planner
    cd smart_student_planner
    ```
 

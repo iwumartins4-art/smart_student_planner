@@ -1,9 +1,14 @@
+import os
+import sys
+
+# CRITICAL FIX: Force ANGLE backend on Windows to prevent Intel GPU crashes #
+if sys.platform == 'win32':
+    os.environ['KIVY_GL_BACKEND'] = 'angle_sdl2'
+
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager
-import sys
-import os
 
 from kivy.utils import platform
 

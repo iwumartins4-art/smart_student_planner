@@ -26,12 +26,15 @@ class Database:
                     from os.path import expanduser
                     base_path = expanduser("~")
             else:
-                base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                # Get the absolute path of the project root
+                base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
             
             db_dir = os.path.join(base_path, "database")
+            print(f"[DB DEBUG] Attempting to initialize database at: {db_dir}")
             
             if not os.path.exists(db_dir):
                 os.makedirs(db_dir, exist_ok=True)
+                print(f"[DB SUCCESS] Created database directory: {db_dir}")
             
             self.db_path = os.path.join(db_dir, "planner.db")
             self.conn = sqlite3.connect(self.db_path, check_same_thread=False)

@@ -163,3 +163,6 @@ class Database:
             ]
             self.cursor.executemany("INSERT INTO tasks (title, module, due_date, priority, notes, status, is_completed) VALUES (?,?,?,?,?,?,?)", demo)
             self.conn.commit()
+
+
+# ihbugvytcft

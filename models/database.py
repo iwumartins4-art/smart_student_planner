@@ -21,23 +21,22 @@ class Database:
             if platform in ['android', 'ios']:
                 app = MDApp.get_running_app()
                 if app:
-                    base_path = app.user_data_dir
+                    base_path = Path(app.user_data_dir)
                 else:
-                    from os.path import expanduser
-                    base_path = expanduser("~")
+                    base_path = Path.home()
             else:
                 # Get the absolute path of the project root
-                base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+                base_path = Path(__file__).resolve().parent.parent
             
-            db_dir = os.path.join(base_path, "database")
+            db_dir = base_path / "database"
             print(f"[DB DEBUG] Attempting to initialize database at: {db_dir}")
             
-            if not os.path.exists(db_dir):
-                os.makedirs(db_dir, exist_ok=True)
+            if not db_dir.exists():
+                db_dir.mkdir(parents=True, exist_ok=True)
                 print(f"[DB SUCCESS] Created database directory: {db_dir}")
             
-            self.db_path = os.path.join(db_dir, "planner.db")
-            self.conn = sqlite3.connect(self.db_path, check_same_thread=False)
+            self.db_path = db_dir / "planner.db"
+            self.conn = sqlite3.connect(str(self.db_path), check_same_thread=False)
             self.cursor = self.conn.cursor()
             
             self.create_tables()
@@ -163,6 +162,3 @@ class Database:
             ]
             self.cursor.executemany("INSERT INTO tasks (title, module, due_date, priority, notes, status, is_completed) VALUES (?,?,?,?,?,?,?)", demo)
             self.conn.commit()
-
-
-# ihbugvytcft

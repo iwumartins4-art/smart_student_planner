@@ -23,22 +23,35 @@ A professional-grade mobile application designed to help university students man
 - Python 3.11 or higher
 - Git
 
-### Steps
+### Windows Installation (Recommended)
 1. **Clone the repository**:
-   ```bash
+   ```powershell
    git clone https://github.com/iwumartins4-art/smart_student_planner
    cd smart_student_planner
    ```
 
-2. **Install dependencies**:
-   ```bash
+2. **Set up a Virtual Environment**:
+   ```powershell
+   python -m venv venv
+   .\venv\Scripts\activate
+   ```
+
+3. **Install dependencies**:
+   ```powershell
    pip install -r requirements.txt
    ```
 
-3. **Run the application**:
-   ```bash
+4. **Run the application**:
+   ```powershell
    python main.py
    ```
+
+### Troubleshooting Startup Crashes
+If the app crashes immediately on Windows:
+1. Ensure you are using **Python 3.11**.
+2. Run `python diagnostic_main.py` to generate a `startup_debug.log`.
+3. Check `app_startup.log` for detailed error messages.
+4. The app automatically forces the `ANGLE` backend for Intel GPU compatibility.
 
 ## ⚠️ Known Limitations
 - **Registration Validation**: Currently lacks strict email format verification.

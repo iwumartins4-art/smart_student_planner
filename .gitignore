@@ -18,3 +18,5 @@ bin/
 .env
 venv/
 env/
+.kivy/
+app_startup.log

@@ -62,4 +62,4 @@ The application is configured to automatically handle common Windows graphics cr
 - The app logs detailed startup information to `app_startup.log` in the root directory.
 
 ---
-**Developed by SupsaveTech for the Smart Student Community.**
+**Developed by Martins Chinatu Iwu (iwumartins4-art) for the Smart Student Community.**

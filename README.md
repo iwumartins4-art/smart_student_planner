@@ -1,67 +1,65 @@
 # Smart Student Planner
 
-A professional-grade mobile application designed to help university students manage their academic tasks, deadlines, and priorities efficiently. Built with **Kivy** and **KivyMD**, following the **MVVM** architectural pattern.
+A professional-grade, cross-platform mobile and desktop application designed specifically for university students. The Smart Student Planner provides a centralized hub for managing academic tasks, tracking deadlines, and monitoring course progress with a stunning Material Design 3 interface.
 
-## 🚀 Features
-- **Secure Authentication**: User login and registration with SQLite persistence.
-- **Dynamic Dashboard**: Real-time metrics (Today's Tasks, Next Deadline, Completion Rate).
-- **Comprehensive Task Management**: Full CRUD operations for academic tasks.
-- **Intelligent Filtering**: Fast search bar to find tasks by title, module, or notes.
-- **Priority Visualization**: Color-coded indicators for High, Medium, and Low priority tasks.
-- **Mobile Optimized**: Material Design 3 UI with responsive layouts and Date Pickers.
+Built with **Python 3.11.5**, **Kivy**, and **KivyMD**, the application follows the **MVVM** (Model-View-ViewModel) architectural pattern to ensure code maintainability, stability, and scalability.
+
+## 🚀 Key Features
+
+- **Personalized Dashboard**: A high-impact overview featuring real-time metrics for "Today's Tasks," "Next Deadline" (with intelligent countdowns), and "Weekly Goal" progress.
+- **Advanced Task Management**: Full CRUD (Create, Read, Update, Delete) operations for tasks, including module association, priority levels, and custom notes.
+- **Smart Search & Filtering**: An integrated live-search bar that filters tasks instantly as you type, supporting module and title matching.
+- **Premium Material 3 UI**: A sleek Dark Mode interface utilizing custom-drawn components for maximum rendering stability on Windows, Linux, and Mobile.
+- **Secure Data Persistence**: Local SQLite3 database integration ensures your data stays safe and private on your device.
+- **Priority Visualization**: Color-coded indicators (Red/Orange/Green) for immediate visual identification of task urgency.
+- **Profile Management**: Dedicated user profile page displaying registration details and academic major.
 
 ## 🛠 Tech Stack
-- **Framework**: Kivy 2.3.0
-- **UI Library**: KivyMD 2.0.1 (Material Design 3)
-- **Language**: Python 3.11+
+
+- **Core**: Python 3.11.5 (Required for optimal stability)
+- **Framework**: Kivy 2.3.1
+- **UI Library**: KivyMD 2.0.1 (Material Design 3 Certified)
 - **Database**: SQLite3
-- **CI/CD**: GitHub Actions (Android APK & iOS builds)
+- **Graphics Backend**: Forced ANGLE (OpenGL ES 2.0) on Windows for maximum compatibility with Intel Iris Xe and other modern GPUs.
 
 ## 📦 Installation & Setup
 
-### Prerequisites
-- Python 3.11 or higher
-- Git
+To ensure a smooth installation, please follow these steps exactly.
 
-### Windows Installation (Recommended)
-1. **Clone the repository**:
-   ```powershell
-   git clone https://github.com/iwumartins4-art/smart_student_planner
-   cd smart_student_planner
-   ```
+### 1. Prerequisites
+- **Python 3.11.5**: This is the required version for optimal stability. Using newer versions (like 3.13) may cause installation failures on fresh PCs due to missing binary wheels.
+- **Git**: Installed and configured on your system.
 
-2. **Set up a Virtual Environment**:
-   ```powershell
-   python -m venv venv
-   .\venv\Scripts\activate
-   ```
+### 2. Windows Installation (Recommended)
 
-3. **Install dependencies**:
-   ```powershell
-   pip install -r requirements.txt
-   ```
+1.  **Clone the Repository**:
+    ```powershell
+    git clone https://github.com/iwumartins4-art/smart_student_planner
+    cd smart_student_planner
+    ```
 
-4. **Run the application**:
-   ```powershell
-   python main.py
-   ```
+2.  **Create a Virtual Environment**:
+    ```powershell
+    python -m venv venv
+    .\venv\Scripts\activate
+    ```
 
-### Troubleshooting Startup Crashes
-If the app crashes immediately on Windows:
-1. Ensure you are using **Python 3.11**.
-2. Run `python diagnostic_main.py` to generate a `startup_debug.log`.
-3. Check `app_startup.log` for detailed error messages.
-4. The app automatically forces the `ANGLE` backend for Intel GPU compatibility.
+3.  **Upgrade Pip & Install Dependencies**:
+    ```powershell
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+    ```
 
-## ⚠️ Known Limitations
-- **Registration Validation**: Currently lacks strict email format verification.
-- **Profile Edits**: User profile information (Major, Student ID) is read-only after registration.
-- **Testing**: No automated unit test suite is included in this version.
-- **Notifications**: Local push notifications for upcoming deadlines are not yet implemented.
+4.  **Run the Application**:
+    ```powershell
+    python main.py
+    ```
 
-## 🔮 Future Improvements
-- **Cloud Sync**: Integrate Firebase or AWS for cross-device data synchronization.
-- **Calendar View**: A full monthly calendar interface for visual deadline tracking.
-- **Push Notifications**: Automated alerts for tasks due within 24 hours.
-- **Unit Testing**: Implementation of `pytest` and `Kivy` testing tools to ensure 90%+ code coverage.
-- **Dark Mode Toggle**: Allow users to switch between Light and Dark Material themes.
+## ⚠️ Stability Notes for Windows Users
+
+The application is configured to automatically handle common Windows graphics crashes by forcing the `ANGLE` backend. If you encounter any visual glitches:
+- Ensure your GPU drivers are up to date.
+- The app logs detailed startup information to `app_startup.log` in the root directory.
+
+---
+**Developed by SupsaveTech for the Smart Student Community.**

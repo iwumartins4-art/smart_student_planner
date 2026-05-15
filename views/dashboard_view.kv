@@ -1,224 +1,237 @@
 <TaskCard>:
-    orientation: "vertical"
+    orientation: "horizontal"
     size_hint_y: None
-    height: dp(110)
-    padding: dp(12)
-    radius: dp(16)
-    style: "elevated"
-    md_bg_color: self.theme_cls.surfaceContainerColor
-    elevation: 2
+    height: dp(100)
+    padding: [dp(16), dp(8)]
+    spacing: dp(16)
     
+    canvas.before:
+        Color:
+            rgba: self.theme_cls.surfaceContainerColor
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(20),]
+            
+    # Priority Indicator
     MDBoxLayout:
-        orientation: "horizontal"
-        spacing: dp(12)
+        id: priority_indicator
+        size_hint_x: None
+        width: dp(4)
+        radius: [dp(2),]
+        pos_hint: {"center_y": .5}
+        md_bg_color: 
+            (0.8, 0.2, 0.2, 1) if root.priority == "High" else \
+            (0.9, 0.6, 0.2, 1) if root.priority == "Medium" else \
+            (0.2, 0.6, 0.2, 1)
+
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: dp(4)
+        size_hint_x: 0.8
+        pos_hint: {"center_y": .5}
         
-        # Priority Indicator
+        MDLabel:
+            id: title_label
+            text: root.title
+            theme_text_color: "Primary"
+            font_style: "Title"
+            role: "small"
+            halign: "left"
+            strikethrough: root.status == "Completed"
+            adaptive_height: True
+            
+        MDLabel:
+            id: module_label
+            text: f"{root.module} • {root.due_date}"
+            theme_text_color: "Secondary"
+            font_style: "Label"
+            role: "medium"
+            halign: "left"
+            adaptive_height: True
+
+        # Status Chip
         MDBoxLayout:
-            size_hint_x: None
-            width: dp(6)
-            radius: [dp(4), 0, 0, dp(4)]
+            adaptive_size: True
+            padding: [dp(8), dp(2), dp(8), dp(2)]
+            radius: dp(4)
             md_bg_color: 
-                (0.8, 0.2, 0.2, 1) if root.priority == "High" else \
-                (0.9, 0.6, 0.2, 1) if root.priority == "Medium" else \
-                (0.2, 0.6, 0.2, 1)
-            
-        MDBoxLayout:
-            orientation: "vertical"
-            spacing: dp(2)
-            pos_hint: {"center_y": .5}
+                (0.5, 0.5, 0.5, 0.1) if root.status == "Not Started" else \
+                (1, 0.6, 0, 0.1) if root.status == "In Progress" else \
+                (0.1, 0.6, 0.1, 0.1)
             
             MDLabel:
-                text: root.title
-                theme_text_color: "Primary"
-                font_style: "Title"
-                role: "medium"
-                strikethrough: root.status == "Completed"
-                adaptive_height: True
-                
-            MDLabel:
-                text: f"{root.module} • {root.due_date}"
-                theme_text_color: "Secondary"
+                id: status_label
+                text: root.status
+                theme_text_color: "Custom"
+                text_color: 
+                    (0.6, 0.6, 0.6, 1) if root.status == "Not Started" else \
+                    (1, 0.6, 0, 1) if root.status == "In Progress" else \
+                    (0.2, 0.7, 0.2, 1)
                 font_style: "Label"
-                role: "medium"
-                adaptive_height: True
-
-            # Status Label with Dynamic Colors
-            MDBoxLayout:
+                role: "small"
                 adaptive_size: True
-                padding: [dp(6), dp(2), dp(6), dp(2)]
-                radius: dp(4)
-                md_bg_color: 
-                    (0.5, 0.5, 0.5, 0.15) if root.status == "Not Started" else \
-                    (1, 0.6, 0, 0.15) if root.status == "In Progress" else \
-                    (0.1, 0.6, 0.1, 0.15)
-                
-                MDLabel:
-                    text: root.status
-                    font_style: "Label"
-                    role: "small"
-                    adaptive_size: True
-                    theme_text_color: "Custom"
-                    text_color: 
-                        (0.6, 0.6, 0.6, 1) if root.status == "Not Started" else \
-                        (1, 0.6, 0, 1) if root.status == "In Progress" else \
-                        (0.2, 0.7, 0.2, 1)
 
-        # Action Button (3-dot menu)
-        MDIconButton:
-            id: menu_btn
-            icon: "dots-vertical"
-            pos_hint: {"center_y": .5}
-            on_release: root.on_menu_click(self)
+    MDIconButton:
+        id: menu_btn
+        icon: "dots-vertical"
+        pos_hint: {"center_y": .5}
+        on_release: root.on_menu_click(self)
 
 <DashboardView>:
     MDBoxLayout:
         orientation: 'vertical'
         md_bg_color: self.theme_cls.backgroundColor
 
+        # Top Navigation
         MDTopAppBar:
             type: "small"
-            md_bg_color: self.theme_cls.surfaceContainerColor
+            size_hint_y: None
+            height: dp(56)
+            md_bg_color: self.theme_cls.backgroundColor
             
             MDTopAppBarTitle:
                 text: "Student Planner"
                 theme_text_color: "Primary"
-
+                
             MDTopAppBarTrailingButtonContainer:
                 MDActionTopAppBarButton:
                     icon: "cog"
-                    on_release: root.manager.current = 'settings'
+                    on_release: app.root.current = 'settings'
                 MDActionTopAppBarButton:
-                    icon: "account-circle"
-                    on_release: root.manager.current = 'user'
+                    icon: "account"
+                    on_release: app.root.current = 'user_profile'
                 MDActionTopAppBarButton:
                     icon: "logout"
                     on_release: root.confirm_logout()
 
-        MDBoxLayout:
-            orientation: 'vertical'
-            padding: [dp(16), dp(8), dp(16), dp(16)]
-            spacing: dp(16)
-
-            # Header Fix: Proper vertical alignment
+        ScrollView:
+            id: main_scroll
+            do_scroll_x: False
             MDBoxLayout:
-                orientation: 'vertical'
+                orientation: "vertical"
+                padding: dp(16)
+                spacing: dp(16)
                 adaptive_height: True
-                spacing: dp(4)
                 
-                MDLabel:
-                    text: "Dashboard"
-                    font_style: "Headline"
-                    role: "small"
-                    theme_text_color: "Primary"
-                    bold: True
+                # Header Section
+                MDBoxLayout:
+                    orientation: "vertical"
                     adaptive_height: True
-                
-                MDLabel:
-                    text: f"Hi, {root.username}!"
-                    font_style: "Title"
-                    role: "small"
-                    theme_text_color: "Secondary"
-                    adaptive_height: True
+                    spacing: dp(2)
+                    
+                    MDLabel:
+                        text: "Dashboard"
+                        theme_text_color: "Primary"
+                        font_style: "Display"
+                        role: "small"
+                        bold: True
+                        adaptive_height: True
+                    
+                    MDLabel:
+                        id: welcome_label
+                        text: f"Hi, {root.username}!"
+                        theme_text_color: "Secondary"
+                        font_style: "Title"
+                        role: "small"
+                        adaptive_height: True
 
-            # Search Bar
-            MDTextField:
-                id: search_field
-                mode: "outlined"
-                on_text: root.refresh_tasks(self.text)
-                size_hint_y: None
-                height: dp(48)
-                
-                MDTextFieldLeadingIcon:
-                    icon: "magnify"
-                
-                MDTextFieldHintText:
-                    text: "Search tasks..."
+                # Search Bar
+                MDTextField:
+                    id: search_field
+                    mode: "outlined"
+                    on_text: root.refresh_tasks(self.text)
+                    size_hint_x: 1
+                    
+                    MDTextFieldLeadingIcon:
+                        icon: "magnify"
+                    
+                    MDTextFieldHintText:
+                        text: "Search tasks..."
 
-            # Dashboard Metrics with Descriptive Labels
-            MDBoxLayout:
-                orientation: 'horizontal'
-                size_hint_y: None
-                height: dp(80)
-                spacing: dp(12)
-                
-                MDCard:
-                    style: "filled"
-                    md_bg_color: self.theme_cls.primaryContainerColor
-                    radius: dp(16)
-                    padding: dp(8)
-                    MDBoxLayout:
-                        orientation: 'vertical'
-                        MDLabel:
-                            text: "Today's Tasks"
-                            font_style: "Label"
-                            role: "small"
-                        MDLabel:
-                            text: str(root.today_count)
-                            font_style: "Title"
-                            role: "medium"
-                            bold: True
-
-                MDCard:
-                    style: "filled"
-                    md_bg_color: self.theme_cls.surfaceContainerColor
-                    radius: dp(16)
-                    padding: dp(8)
-                    MDBoxLayout:
-                        orientation: 'vertical'
-                        MDLabel:
-                            text: "Next Deadline"
-                            font_style: "Label"
-                            role: "small"
-                        MDLabel:
-                            text: root.deadline_text
-                            font_style: "Title"
-                            role: "medium"
-                            bold: True
-                            shorten: False
-                            halign: "left"
-
-                MDCard:
-                    style: "filled"
-                    md_bg_color: self.theme_cls.surfaceContainerColor
-                    radius: dp(16)
-                    padding: dp(8)
-                    MDBoxLayout:
-                        orientation: 'vertical'
-                        MDLabel:
-                            text: "Weekly Goal"
-                            font_style: "Label"
-                            role: "small"
-                        MDLabel:
-                            text: f"{root.completion_percent}%"
-                            font_style: "Title"
-                            role: "medium"
-                            bold: True
-
-            # Data-Driven List
-            RecycleView:
-                id: task_rv
-                viewclass: 'TaskCard'
-                data: root.rv_data
-                RecycleBoxLayout:
-                    default_size: None, dp(110)
-                    default_size_hint: 1, None
+                # Summary Cards
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    spacing: dp(10)
                     size_hint_y: None
-                    height: self.minimum_height
-                    orientation: 'vertical'
+                    height: dp(90)
+                    
+                    # Card 1
+                    MDCard:
+                        style: "filled"
+                        md_bg_color: self.theme_cls.surfaceContainerLowColor
+                        padding: dp(10)
+                        radius: dp(16)
+                        MDBoxLayout:
+                            orientation: 'vertical'
+                            MDLabel:
+                                text: "Today's Tasks"
+                                theme_text_color: "Secondary"
+                                font_style: "Label"
+                                role: "medium"
+                            MDLabel:
+                                id: today_tasks_label
+                                text: str(root.today_count)
+                                theme_text_color: "Primary"
+                                font_style: "Title"
+                                role: "medium"
+                                bold: True
+
+                    # Card 2
+                    MDCard:
+                        style: "filled"
+                        md_bg_color: self.theme_cls.surfaceContainerLowColor
+                        padding: dp(10)
+                        radius: dp(16)
+                        MDBoxLayout:
+                            orientation: 'vertical'
+                            MDLabel:
+                                text: "Next Deadline"
+                                theme_text_color: "Secondary"
+                                font_style: "Label"
+                                role: "medium"
+                            MDLabel:
+                                id: deadline_label
+                                text: root.deadline_text
+                                theme_text_color: "Primary"
+                                font_style: "Title"
+                                role: "medium"
+                                bold: True
+
+                    # Card 3
+                    MDCard:
+                        style: "filled"
+                        md_bg_color: self.theme_cls.surfaceContainerLowColor
+                        padding: dp(10)
+                        radius: dp(16)
+                        MDBoxLayout:
+                            orientation: 'vertical'
+                            MDLabel:
+                                text: "Weekly Goal"
+                                theme_text_color: "Secondary"
+                                font_style: "Label"
+                                role: "medium"
+                            MDLabel:
+                                id: goal_label
+                                text: f"{root.completion_percent}%"
+                                theme_text_color: "Primary"
+                                font_style: "Title"
+                                role: "medium"
+                                bold: True
+
+                # Task List Container
+                MDBoxLayout:
+                    id: task_list_container
+                    orientation: "vertical"
                     spacing: dp(12)
-                    padding: [0, 0, 0, dp(80)]
+                    adaptive_height: True
+                    padding: [0, 0, 0, dp(100)] # Bottom padding for FAB
 
-            MDLabel:
-                id: empty_label
-                text: "No tasks found"
-                halign: "center"
-                theme_text_color: "Secondary"
-                size_hint_y: None
-                height: dp(40) if not root.rv_data else 0
-                opacity: 1 if not root.rv_data else 0
-
+    # Floating Action Button
     MDFabButton:
         icon: "plus"
         style: "standard"
-        pos_hint: {"center_x": .88, "center_y": .12}
+        pos_hint: {"right": 0.95, "y": 0.05}
         on_release: root.go_to_add_task()
+        theme_bg_color: "Custom"
+        md_bg_color: self.theme_cls.primaryColor

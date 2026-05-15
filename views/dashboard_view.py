@@ -1,3 +1,5 @@
+from kivy.factory import Factory
+from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.uix.widget import Widget
 from kivymd.uix.screen import MDScreen
 from kivymd.app import MDApp
@@ -5,13 +7,14 @@ from viewmodels.task_viewmodel import TaskViewModel
 from kivymd.uix.card import MDCard
 from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
 from kivymd.uix.dialog import MDDialog, MDDialogIcon, MDDialogHeadlineText, MDDialogSupportingText, MDDialogButtonContainer
-from kivymd.uix.button import MDButton, MDButtonText
+from kivymd.uix.button import MDButton, MDButtonText, MDFabButton
 from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.textfield import MDTextField
 from kivy.properties import StringProperty, ObjectProperty, BooleanProperty, NumericProperty, ListProperty
 from kivy.metrics import dp
 import datetime
 
-class TaskCard(MDCard):
+class TaskCard(MDBoxLayout):
     title = StringProperty()
     module = StringProperty()
     due_date = StringProperty()
@@ -23,8 +26,28 @@ class TaskCard(MDCard):
     def on_menu_click(self, button):
         app = MDApp.get_running_app()
         dashboard = app.root.get_screen('dashboard')
-        # CRITICAL: Always use task_id as the primary identifier
         dashboard.open_task_menu(button, self.task_id)
+
+    def on_title(self, instance, value):
+        if 'title_label' in self.ids:
+            self.ids.title_label.text = str(value) if value else ""
+            self.ids.title_label.texture_update()
+
+    def on_module(self, instance, value):
+        self._update_secondary_label()
+
+    def on_due_date(self, instance, value):
+        self._update_secondary_label()
+
+    def _update_secondary_label(self):
+        if 'module_label' in self.ids:
+            self.ids.module_label.text = f"{self.module} • {self.due_date}"
+            self.ids.module_label.texture_update()
+
+    def on_status(self, instance, value):
+        if 'status_label' in self.ids:
+            self.ids.status_label.text = str(value) if value else "Not Started"
+            self.ids.status_label.texture_update()
 
 class DashboardView(MDScreen):
     rv_data = ListProperty([])
@@ -43,51 +66,115 @@ class DashboardView(MDScreen):
     def on_enter(self):
         app = MDApp.get_running_app()
         if app.user_data and 'username' in app.user_data:
-            self.username = app.user_data['username']
+            self.username = str(app.user_data['username'])
+        else:
+            self.username = "Student"
+            
+        if 'welcome_label' in self.ids:
+            self.ids.welcome_label.text = f"Hi, {self.username}!"
+            
+        print(f"[DASHBOARD DEBUG] Entering dashboard. User: {self.username}")
         self.refresh_tasks()
 
     def refresh_tasks(self, search_query=None):
         try:
-            # Mandatory Fix 3 & 6: Reload everything and force full RecycleView refresh
+            print(f"[DASHBOARD DEBUG] Refreshing tasks. Query: {search_query}")
             tasks = self.viewmodel.get_tasks(search_query)
+            print(f"[DASHBOARD DEBUG] Fetched {len(tasks)} tasks.")
             self.update_metrics(tasks)
             
-            # Explicitly reset data to force view recycling
             self.rv_data = [] 
             self.rv_data = tasks
             
-            # Ensure the RecycleView knows the data changed
-            if 'task_rv' in self.ids:
-                self.ids.task_rv.refresh_from_data()
+            # Populate manual task list
+            self.refresh_task_list(tasks)
                 
         except Exception as e:
-            print(f"STABILITY ERROR: {e}")
+            print(f"STABILITY ERROR in refresh_tasks: {e}")
+            import traceback
+            traceback.print_exc()
 
-    def update_metrics(self, tasks):
-        today_str = datetime.datetime.now().strftime("%Y-%m-%d")
-        self.today_count = sum(1 for t in tasks if t['due_date'] == today_str)
-        
-        total = len(tasks)
-        completed = sum(1 for t in tasks if t['status'] == "Completed")
-        self.completion_percent = int((completed / total) * 100) if total > 0 else 0
-        
-        pending = [t for t in tasks if t['status'] != "Completed"]
-        if not pending:
-            self.deadline_text = "Done!"
+    def refresh_task_list(self, tasks):
+        if 'task_list_container' not in self.ids:
             return
             
-        try:
-            pending.sort(key=lambda x: x['due_date'])
-            nearest = pending[0]['due_date']
-            target_date = datetime.datetime.strptime(nearest, "%Y-%m-%d")
-            diff = target_date - datetime.datetime.now()
-            hours = diff.total_seconds() / 3600
+        container = self.ids.task_list_container
+        container.clear_widgets()
+        
+        if not tasks:
+            # Add "No tasks found" label
+            no_task_label = Factory.MDLabel(
+                text="No tasks found",
+                halign="center",
+                theme_text_color="Secondary",
+                font_style="Title",
+                role="medium",
+                size_hint_y=None,
+                height=dp(100)
+            )
+            container.add_widget(no_task_label)
+            return
             
-            if hours < 0: self.deadline_text = "Overdue"
-            elif hours < 24: self.deadline_text = f"{int(hours)}h"
-            else: self.deadline_text = f"{int(hours/24)}d"
-        except:
-            self.deadline_text = "---"
+        for task in tasks:
+            card = TaskCard(
+                task_id=task['task_id'],
+                title=task['title'],
+                module=task['module'],
+                due_date=task['due_date'],
+                priority=task['priority'],
+                status=task['status']
+            )
+            container.add_widget(card)
+
+    def _update_rv_height(self, dt):
+        if 'task_rv' in self.ids:
+            rv = self.ids.task_rv
+            # Calculate height based on item count and spacing (dp(120) per item + dp(16) spacing)
+            count = len(rv.data)
+            new_height = count * dp(136) + dp(100) # extra padding at bottom
+            rv.height = new_height
+
+    def update_metrics(self, tasks):
+        try:
+            today_str = datetime.datetime.now().strftime("%Y-%m-%d")
+            self.today_count = sum(1 for t in tasks if t['due_date'] == today_str)
+            
+            total = len(tasks)
+            completed = sum(1 for t in tasks if t['status'] == "Completed")
+            self.completion_percent = int((completed / total) * 100) if total > 0 else 0
+            
+            pending = [t for t in tasks if t['status'] != "Completed"]
+            if not pending:
+                self.deadline_text = "Done!"
+            else:
+                try:
+                    pending.sort(key=lambda x: x['due_date'])
+                    nearest = pending[0]['due_date']
+                    target_date = datetime.datetime.strptime(nearest, "%Y-%m-%d")
+                    diff = target_date - datetime.datetime.now()
+                    hours = diff.total_seconds() / 3600
+                    
+                    if hours < 0: self.deadline_text = "Overdue"
+                    elif hours < 24: self.deadline_text = f"{int(hours)}h"
+                    else: self.deadline_text = f"{int(hours/24)}d"
+                except Exception as e:
+                    print(f"[DASHBOARD DEBUG] Error calculating deadline: {e}")
+                    self.deadline_text = "---"
+
+            # EXPLICIT ID UPDATES (Mandatory Fix for Blank Cards)
+            if 'today_tasks_label' in self.ids:
+                self.ids.today_tasks_label.text = str(self.today_count)
+            if 'deadline_label' in self.ids:
+                self.ids.deadline_label.text = str(self.deadline_text)
+            if 'goal_label' in self.ids:
+                self.ids.goal_label.text = f"{self.completion_percent}%"
+            
+            print(f"[DASHBOARD DEBUG] Metrics updated: Today={self.today_count}, Goal={self.completion_percent}%, Next={self.deadline_text}")
+
+        except Exception as e:
+            print(f"STABILITY ERROR in update_metrics: {e}")
+            import traceback
+            traceback.print_exc()
 
     def open_task_menu(self, caller, task_id):
         # Mandatory Fix 1: Operations strictly use task_id

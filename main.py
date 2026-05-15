@@ -106,7 +106,7 @@ class SmartStudentPlanner(MDApp):
             sm.add_widget(DashboardView(name='dashboard'))
             sm.add_widget(TaskFormView(name='task_form'))
             sm.add_widget(SettingsView(name='settings'))
-            sm.add_widget(UserView(name='user'))
+            sm.add_widget(UserView(name='user_profile'))
             
             logger.info("Root widget created successfully.")
             return sm

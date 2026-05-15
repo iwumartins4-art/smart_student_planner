@@ -27,8 +27,11 @@ Built with **Python 3.11.5**, **Kivy**, and **KivyMD**, the application follows 
 To ensure a smooth installation, please follow these steps exactly.
 
 ### 1. Prerequisites
-- **Python 3.11.5**: This is the required version for optimal stability. Using newer versions (like 3.13) may cause installation failures on fresh PCs due to missing binary wheels.
-- **Git**: Installed and configured on your system.
+- **[Python 3.11.5 - Windows installer (64-bit)]([https://www.python.org/downloads/release/python-3115/](https://www.python.org/downloads/release/python-3115/))**: This is the required version for optimal stability. Using newer versions (like 3.13) may cause installation failures on fresh PCs due to missing binary wheels.
+
+Ensure you check the **Add python.exe to PATH** box during installation.    
+
+- **[Git for Windows - 2.54.0 (64-bit)]([https://git-scm.com/install/windows](https://git-scm.com/install/windows))**: Installed and configured on your system.
 
 ### 2. Windows Installation (Recommended)
 

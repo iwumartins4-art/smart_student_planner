@@ -5,7 +5,10 @@ import traceback
 from pathlib import Path
 
 # --- GLOBAL PATH CONFIGURATION ---
-BASE_DIR = Path(__file__).resolve().parent
+if getattr(sys, 'frozen', False):
+    BASE_DIR = Path(sys._MEIPASS)
+else:
+    BASE_DIR = Path(__file__).resolve().parent
 ASSETS_DIR = BASE_DIR / "assets"
 VIEWS_DIR = BASE_DIR / "views"
 LOG_FILE = BASE_DIR / "app_startup.log"

@@ -25,3 +25,6 @@ class LoginView(MDScreen):
 
     def open_github(self):
         webbrowser.open("https://github.com/iwumartins4-art/smart_student_planner")
+
+    def open_windows_downloads(self):
+        webbrowser.open("https://github.com/iwumartins4-art/smart_student_planner/actions")

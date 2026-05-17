@@ -2,6 +2,7 @@ from kivymd.uix.screen import MDScreen
 from viewmodels.auth_viewmodel import AuthViewModel
 from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
 from kivymd.app import MDApp
+import webbrowser
 
 class LoginView(MDScreen):
     def __init__(self, **kwargs):
@@ -21,3 +22,6 @@ class LoginView(MDScreen):
     def clear_fields(self):
         self.ids.username.text = ""
         self.ids.password.text = ""
+
+    def open_github(self):
+        webbrowser.open("https://github.com/iwumartins4-art/smart_student_planner")

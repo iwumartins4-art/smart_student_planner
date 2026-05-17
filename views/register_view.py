@@ -8,6 +8,10 @@ class RegisterView(MDScreen):
             self.show_error("Please fill in all fields")
             return
             
+        if "@" not in email or "." not in email:
+            self.show_error("Please enter a valid email address")
+            return
+            
         if password != confirm_password:
             self.show_error("Passwords do not match")
             return

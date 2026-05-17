@@ -47,7 +47,7 @@
                 mode: "outlined"
                 theme_text_color: "Primary"
                 MDTextFieldHintText:
-                    text: "Username / Email"
+                    text: "Username"
                 MDTextFieldLeadingIcon:
                     icon: "account-outline"
 
@@ -109,7 +109,10 @@
 
                 MDIconButton:
                     icon: "google"
+                    on_release: root.open_github()
                 MDIconButton:
                     icon: "apple"
+                    on_release: root.open_github()
                 MDIconButton:
                     icon: "microsoft-windows"
+                    on_release: root.open_github()

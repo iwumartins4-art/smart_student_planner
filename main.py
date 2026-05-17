@@ -14,13 +14,15 @@ VIEWS_DIR = BASE_DIR / "views"
 LOG_FILE = BASE_DIR / "app_startup.log"
 
 # --- LOGGING SETUP ---
+handlers = [logging.FileHandler(LOG_FILE, mode='w', encoding='utf-8')]
+if not getattr(sys, 'frozen', False):
+    if sys.stdout is not None:
+        handlers.append(logging.StreamHandler(sys.stdout))
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(message)s',
-    handlers=[
-        logging.StreamHandler(sys.stdout),
-        logging.FileHandler(LOG_FILE, mode='w', encoding='utf-8')
-    ]
+    handlers=handlers
 )
 logger = logging.getLogger("SmartStudentPlanner")
 

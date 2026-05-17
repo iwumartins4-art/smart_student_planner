@@ -38,6 +38,10 @@ try:
     from kivy.uix.screenmanager import ScreenManager
     from kivy.utils import platform
     from kivy.properties import DictProperty
+    from kivy.resources import resource_add_path
+    
+    # Add BASE_DIR to Kivy's search paths to resolve assets inside the bundled .exe
+    resource_add_path(str(BASE_DIR))
     
     # Delayed imports to ensure Kivy env is set
     import kivy

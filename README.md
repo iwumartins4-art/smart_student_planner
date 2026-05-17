@@ -32,7 +32,15 @@ Ensure you check the **Add python.exe to PATH** box during installation.
 
 - **[Git for Windows](https://git-scm.com/install/windows)**: Installed and configured.
 
-### 2. Windows Installation (Recommended)
+### 💻 Standalone Executable (.exe) for Windows (No Setup Required)
+
+If you want to run and test the application instantly without installing Python or setting up a virtual environment:
+1. Navigate to the **Actions** tab of this repository on GitHub.
+2. Click on the most recent successful run of the **Build Windows EXE** workflow.
+3. Scroll down to the **Artifacts** section at the bottom.
+4. Download the `SmartStudentPlanner-Windows-EXE` zip file, extract it, and double-click `SmartStudentPlanner.exe` to run the app immediately!
+
+### 2. Windows Installation (Developer Setup)
 
 1.  **Clone the Repository**:
     ```powershell
